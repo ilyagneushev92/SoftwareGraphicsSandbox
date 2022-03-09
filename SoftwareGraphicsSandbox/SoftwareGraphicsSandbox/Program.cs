@@ -20,9 +20,38 @@ namespace SoftwareGraphicsSandbox {
             form.FormClosed += Form_FormClosed;
             form.Show();
 
-            // Fuck
+            
             Renderer renderer = new Renderer(form.Handle);
             image = renderer.BackBuffer;
+
+            static void BresenhamLineOneQuadrant(int x0, int y0, int x1, int y1, Color32 color)
+            {
+                int k;
+                
+                int _x0 = x0;
+                int _y0 = y0;
+                int _x1 = x1;
+                int _y1 = y1;
+
+                int y = _y0;
+
+                
+
+                // reversed angle coefficient
+                k = (x1 - x0) / (y1 - y0);
+                
+                int error = 0;
+
+
+                for (int x = x0; x <= x1; x++)
+                {
+                    image.SetPixel(x, y, color);
+                    error++;
+                    if (error % k == 0) y--;
+
+                }
+
+            }
 
             while(_running){
                 //Render image 
@@ -35,6 +64,9 @@ namespace SoftwareGraphicsSandbox {
                 for (int x = 0; x < 100; ++x) {
                     image.SetPixel(x + 100, 100, Color32.Green);
                 }
+
+
+                BresenhamLineOneQuadrant(250, 250, 750, 500, Color32.Red);
 
                 //Show image in window
                 renderer.Present();
