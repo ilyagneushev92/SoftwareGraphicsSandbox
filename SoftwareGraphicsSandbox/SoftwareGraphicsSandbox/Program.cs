@@ -20,6 +20,7 @@ namespace SoftwareGraphicsSandbox {
             form.FormClosed += Form_FormClosed;
             form.Show();
 
+            // Fuck
             Renderer renderer = new Renderer(form.Handle);
             image = renderer.BackBuffer;
 

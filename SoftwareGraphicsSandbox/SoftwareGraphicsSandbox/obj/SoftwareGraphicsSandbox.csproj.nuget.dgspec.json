@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ilya.gneushev\\Desktop\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox.csproj": {}
+    "D:\\GIT\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ilya.gneushev\\Desktop\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox.csproj": {
+    "D:\\GIT\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ilya.gneushev\\Desktop\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox.csproj",
+        "projectUniqueName": "D:\\GIT\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox.csproj",
         "projectName": "SoftwareGraphicsSandbox",
-        "projectPath": "C:\\Users\\ilya.gneushev\\Desktop\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox.csproj",
+        "projectPath": "D:\\GIT\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox.csproj",
         "packagesPath": "C:\\Users\\ilya.gneushev\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ilya.gneushev\\Desktop\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\obj\\",
+        "outputPath": "D:\\GIT\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\SoftwareGraphicsSandbox\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ilya.gneushev\\AppData\\Roaming\\NuGet\\NuGet.Config",
