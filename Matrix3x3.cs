@@ -110,6 +110,36 @@ namespace SoftwareGraphicsSandbox {
                                  m3, m4, m5,
                                  m6, m7, m8);
         }
+
+        public static Matrix3x3 inverted(Matrix3x3 matrix) {
+            float m11 = matrix.M0;
+            float m12 = matrix.M1;
+            float m13 = matrix.M2;
+            float m21 = matrix.M3;
+            float m22 = matrix.M4;
+            float m23 = matrix.M5;
+            float m31 = matrix.M6;
+            float m32 = matrix.M7;
+            float m33 = matrix.M8;
+
+            var det = m11 * (m22 * m33 - m23 * m32) - m12 * (m21 * m33 - m23 * m31) + m13 * (m21 * m32 - m22 * m31);
+
+            var a11 = m22 * m33 - m23 * m32;
+            var a12 = m21 * m33 - m23 * m31; 
+            var a13 = m21 * m32 - m22 * m31; 
+            var a21 = m12 * m33 - m32 * m13;
+            var a22 = m11 * m33 - m13 * m31; 
+            var a23 = m11 * m32 - m12 * m31;
+            var a31 = m12 * m23 - m22 * m13;
+            var a32 = m11 * m23 - m21 * m13;
+            var a33 = m11 * m22 - m12 * m21; 
+
+            var result = new  Matrix3x3(a11 / det, -a21 / det,  a31 / det,
+                                        -a12 / det, a22 / det, -a32 / det,
+                                         a13 / det, -a23 / det, a33 / det);
+
+            return result;
+        }
         // Matrix3x3 multiplies Matrix3x3
         public static Matrix3x3 operator *(Matrix3x3 Left, Matrix3x3 Right) {
             float m0 = Left.M0 * Right.M0 + Left.M1 * Right.M3 + Left.M2 * Right.M6;
@@ -130,7 +160,7 @@ namespace SoftwareGraphicsSandbox {
 
         }
         // Matrix3x3 multiplies Point3D
-        public static Point3D operator *(Point3D Point, Matrix3x3 Matrix) {
+        public static Point3D operator *(Matrix3x3 Matrix, Point3D Point) {
             float x = Matrix.M0 * Point.X + Matrix.M1 * Point.Y + Matrix.M2 * Point.Z;
             float y = Matrix.M3 * Point.X + Matrix.M4 * Point.Y + Matrix.M5 * Point.Z;
             float z = Matrix.M6 * Point.X + Matrix.M7 * Point.Y + Matrix.M8 * Point.Z;
@@ -138,7 +168,7 @@ namespace SoftwareGraphicsSandbox {
         }
 
         // Matrix3x3 multiplies Point2D
-        public static Point2D operator *(Point2D Point, Matrix3x3 Matrix) {
+        public static Point2D operator *(Matrix3x3 Matrix, Point2D Point) {
             float x = Matrix.M0 * Point.X + Matrix.M1 * Point.Y + Matrix.M2;
             float y = Matrix.M3 * Point.X + Matrix.M4 * Point.Y + Matrix.M5;
             return new Point2D(x, y);

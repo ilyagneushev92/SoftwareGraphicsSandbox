@@ -56,27 +56,21 @@ namespace SoftwareGraphicsSandbox {
 
         public static Matrix4x4 transposed(Matrix4x4 matrix) {
             float m0 = matrix.M0;
-            float m5 = matrix.M5;
-            float m10 = matrix.M10;
-            float m15 = matrix.M15;
-            float swap = matrix.M1;
             float m1 = matrix.M4;
-            float m4 = swap;
-            swap = matrix.M2;
             float m2 = matrix.M8;
-            float m8 = swap;
-            swap = matrix.M3;
             float m3 = matrix.M12;
-            float m12 = swap;
-            swap = matrix.M6;
+            float m4 = matrix.M1;
+            float m5 = matrix.M5;
             float m6 = matrix.M9;
-            float m9 = swap;
-            swap = matrix.M7;
             float m7 = matrix.M13;
-            float m13 = swap;
-            swap = matrix.M11;
+            float m8 = matrix.M2;
+            float m9 = matrix.M6;
+            float m10 = matrix.M10;
             float m11 = matrix.M14;
-            float m14 = swap;
+            float m12 = matrix.M3;
+            float m13 = matrix.M7;
+            float m14 = matrix.M11;
+            float m15 = matrix.M15;
             return new Matrix4x4(m0, m1, m2, m3,
                                  m4, m5, m6, m7,
                                  m8, m9, m10, m11,
@@ -205,37 +199,54 @@ namespace SoftwareGraphicsSandbox {
             float m43 = matrix.M14;
             float m44 = matrix.M15;
 
-            // Find the components of adjugated matrix
-            float a11 = m22 * m33 * m44 + m23 * m34 * m42 + m24 * m32 * m43 - m24 * m33 * m42 - m23 * m32 * m44 - m22 * m34 * m43;
-            float a12 = m21 * m33 * m44 + m23 * m34 * m41 + m24 * m31 * m43 - m24 * m33 * m41 - m23 * m31 * m44 - m21 * m34 * m43;
-            float a13 = m21 * m32 * m44 + m22 * m34 * m41 + m24 * m31 * m42 - m24 * m32 * m41 - m22 * m31 * m44 - m21 * m34 * m42;
-            float a14 = m21 * m32 * m43 + m22 * m33 * m41 + m23 * m31 * m42 - m23 * m32 * m41 - m22 * m31 * m43 - m21 * m33 * m42;
-
-            float a21 = m12 * m33 * m44 + m13 * m34 * m42 + m14 * m32 * m43 - m14 * m33 * m42 - m13 * m32 * m44 - m12 * m34 * m43;
-            float a22 = m11 * m33 * m44 + m13 * m34 * m41 + m14 * m31 * m43 - m14 * m33 * m41 - m13 * m31 * m44 - m11 * m34 * m43;
-            float a23 = m11 * m32 * m44 + m12 * m34 * m41 + m14 * m31 * m42 - m14 * m32 * m41 - m12 * m31 * m44 - m11 * m34 * m42;
-            float a24 = m11 * m32 * m43 + m12 * m33 * m41 + m13 * m31 * m42 - m13 * m32 * m41 - m12 * m31 * m43 - m11 * m33 * m42;
-
-            float a31 = m12 * m23 * m44 + m13 * m24 * m42 + m14 * m22 * m43 - m14 * m23 * m42 - m13 * m22 * m44 - m12 * m24 * m43;
-            float a32 = m11 * m23 * m44 + m13 * m24 * m41 + m14 * m21 * m43 - m14 * m23 * m41 - m13 * m21 * m44 - m11 * m24 * m43;
-            float a33 = m11 * m22 * m44 + m12 * m24 * m41 + m14 * m21 * m42 - m14 * m22 * m41 - m12 * m21 * m44 - m11 * m24 * m42;
-            float a34 = m11 * m22 * m43 + m12 * m23 * m41 + m13 * m21 * m42 - m13 * m22 * m41 - m12 * m21 * m43 - m11 * m23 * m42;
-
-            float a41 = m12 * m23 * m34 + m13 * m24 * m32 + m14 * m22 * m33 - m14 * m23 * m32 - m13 * m22 * m34 - m12 * m24 * m33;
-            float a42 = m11 * m23 * m34 + m13 * m24 * m31 + m14 * m21 * m33 - m14 * m23 * m31 - m13 * m21 * m34 - m11 * m24 * m33;
-            float a43 = m11 * m22 * m34 + m12 * m24 * m31 + m14 * m21 * m32 - m14 * m22 * m31 - m12 * m21 * m34 - m11 * m24 * m32;
-            float a44 = m11 * m22 * m33 + m12 * m23 * m31 + m13 * m21 * m32 - m13 * m22 * m31 - m12 * m21 * m33 - m11 * m23 * m32;
-
             // find the determinant
-            float det = m11 * a11 - m21 * a21 + m31 * a31 - m41 * a41;
+            float det = m11 * (m22 * m33 * m44 + m23 * m34 * m42 + m24 * m32 * m43 - m24 * m33 * m42 - m23 * m32 * m44 - m22 * m34 * m43)
+                      - m21 * (m12 * m33 * m44 + m13 * m34 * m42 + m14 * m32 * m43 - m14 * m33 * m42 - m13 * m32 * m44 - m12 * m34 * m43)
+                      + m31 * (m12 * m23 * m44 + m13 * m24 * m42 + m14 * m22 * m43 - m14 * m23 * m42 - m13 * m22 * m44 - m12 * m24 * m43)
+                      - m41 * (m12 * m23 * m34 + m13 * m24 * m32 + m14 * m22 * m33 - m14 * m23 * m32 - m13 * m22 * m34 - m12 * m24 * m33);
 
-            // Inverted matrix return 
-            return new Matrix4x4(a11 / det, a12 / det, a13 / det, a14 / det,
-                                  a21 / det, a22 / det, a23 / det, a24 / det,
-                                  a31 / det, a32 / det, a33 / det, a34 / det,
-                                  a41 / det, a42 / det, a43 / det, a44 / det);
+            // Find the components of adjugated matrix
+            float a11 = m22 * m33 * m44 + m23 * m34 * m42 + m24 * m32 * m43 
+                        - m24 * m33 * m42 - m23 * m32 * m44 - m22 * m34 * m43;
+            float a12 = m21 * m33 * m44 + m23 * m34 * m41 + m24 * m31 * m43 
+                        - m24 * m33 * m41 - m23 * m31 * m44 - m21 * m34 * m43;
+            float a13 = m21 * m32 * m44 + m22 * m34 * m41 + m24 * m31 * m42 
+                        - m24 * m32 * m41 - m22 * m31 * m44 - m21 * m34 * m42;
+            float a14 = m21 * m32 * m43 + m22 * m33 * m41 + m23 * m31 * m42
+                        - m23 * m32 * m41 - m22 * m31 * m43 - m21 * m33 * m42;
 
+            float a21 = m12 * m33 * m44 + m13 * m34 * m42 + m14 * m32 * m43 
+                      - m14 * m33 * m42 - m13 * m32 * m44 - m12 * m34 * m43;
+            float a22 = m11 * m33 * m44 + m13 * m34 * m41 + m14 * m31 * m43 
+                      - m14 * m33 * m41 - m13 * m31 * m44 - m11 * m34 * m43;
+            float a23 = m11 * m32 * m44 + m12 * m34 * m41 + m14 * m31 * m42
+                      - m14 * m32 * m41 - m12 * m31 * m44 - m11 * m34 * m42;
+            float a24 = m11 * m32 * m43 + m12 * m33 * m41 + m13 * m31 * m42 
+                      - m13 * m32 * m41 - m12 * m31 * m43 - m11 * m33 * m42;
 
+            float a31 = m12 * m23 * m44 + m13 * m24 * m42 + m14 * m22 * m43 
+                      - m14 * m23 * m42 - m13 * m22 * m44 - m12 * m24 * m43;
+            float a32 = m11 * m23 * m44 + m13 * m24 * m41 + m14 * m21 * m43
+                      - m14 * m23 * m41 - m13 * m21 * m44 - m11 * m24 * m43;
+            float a33 = m11 * m22 * m44 + m12 * m24 * m41 + m14 * m21 * m42 
+                      - m14 * m22 * m41 - m12 * m21 * m44 - m11 * m24 * m42;
+            float a34 = m11 * m22 * m43 + m12 * m23 * m41 + m13 * m21 * m42
+                      - m13 * m22 * m41 - m12 * m21 * m43 - m11 * m23 * m42;
+
+            float a41 = m12 * m23 * m34 + m13 * m24 * m32 + m14 * m22 * m33 
+                      - m14 * m23 * m32 - m13 * m22 * m34 - m12 * m24 * m33;
+            float a42 = m11 * m23 * m34 + m13 * m24 * m31 + m14 * m21 * m33
+                      - m14 * m23 * m31 - m13 * m21 * m34 - m11 * m24 * m33;
+            float a43 = m11 * m22 * m34 + m12 * m24 * m31 + m14 * m21 * m32 
+                      - m14 * m22 * m31 - m12 * m21 * m34 - m11 * m24 * m32;
+            float a44 = m11 * m22 * m33 + m12 * m23 * m31 + m13 * m21 * m32 
+                      - m13 * m22 * m31 - m12 * m21 * m33 - m11 * m23 * m32;
+            // Inverted matrix return [;
+            var result = new Matrix4x4(a11/det, - a21/det, a31/det, - a41/det,
+                                       - a12/det, a22/det, -a32/det, a42/det,
+                                       a13/det, -a23/det, a33/det, - a43/det,
+                                       - a14/det, a24/det, - a34/det, a44/det);
+            return result;
 
         }
 

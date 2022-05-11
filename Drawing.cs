@@ -8,15 +8,15 @@ namespace SoftwareGraphicsSandbox {
         public static void DrawCircle(Matrix3x3 Matrix, int verticesAmount, Image image, Color32 color) {
             float step = 2 * MathF.PI / verticesAmount;
             // constStep is for second point of drawing line
-            float constStep = step;
-            for (int i = 1; i <= verticesAmount + 1; i++) {
-                var Point1 = new Point2D(MathF.Sin(step), MathF.Cos(step));
-                var Point2 = new Point2D(MathF.Sin(step + constStep), MathF.Cos(step + constStep));
-                var transformedPoint1 = Point1 * Matrix;
-                var transformedPoint2 = Point2 * Matrix;
-                BresenhamLinePoint2D(image, transformedPoint1, transformedPoint2, color);
-                step += constStep;
 
+            var sin = MathF.Sin(step);
+            var cos = MathF.Cos(step);
+            var prev = new Point2D(1, 0);
+
+            for (int i = 1; i <= verticesAmount + 1; i++) {
+                var cur = new Point2D(cos*prev.X - sin*prev.Y, sin*prev.X + cos*prev.Y);
+                BresenhamLinePoint2D(image, Matrix * prev, Matrix * cur, color);
+                prev = cur;
             }
         }
         public static void setPixel2(Image image, int x, int y, Color32 color) {
@@ -86,6 +86,7 @@ namespace SoftwareGraphicsSandbox {
 
             foreach (int a in range(a0, a1)) {
                 if (!swap)
+                    // setPixel or setPixel2 ???
                     setPixel2(image, a, b, color);
                 else
                     setPixel2(image, b, a, color);
