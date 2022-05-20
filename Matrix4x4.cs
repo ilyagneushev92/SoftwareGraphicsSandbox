@@ -54,7 +54,7 @@ namespace SoftwareGraphicsSandbox {
             }
         }
 
-        public static Matrix4x4 transposed(Matrix4x4 matrix) {
+        public static Matrix4x4 Transposed(Matrix4x4 matrix) {
             float m0 = matrix.M0;
             float m1 = matrix.M4;
             float m2 = matrix.M8;
@@ -77,19 +77,22 @@ namespace SoftwareGraphicsSandbox {
                                  m12, m13, m14, m15);
         }
 
-        public static Matrix4x4 rotateMatrix(float angleRadians) {
+        public static Matrix4x4 RotateMatrix(float angleRadians) {
             float m0 = MathF.Cos(angleRadians);
-            float m1 = MathF.Sin(angleRadians);
-            float m2 = 0;
+            float m1 = 0;
+            float m2 = MathF.Sin(angleRadians); ;
             float m3 = 0;
-            float m4 = -MathF.Sin(angleRadians);
-            float m5 = MathF.Cos(angleRadians);
+
+            float m4 = 0;
+            float m5 = 1;
             float m6 = 0;
             float m7 = 0;
-            float m8 = 0;
+
+            float m8 = -MathF.Sin(angleRadians);
             float m9 = 0;
-            float m10 = 1;
+            float m10 = MathF.Cos(angleRadians);
             float m11 = 0;
+
             float m12 = 0;
             float m13 = 0;
             float m14 = 0;
@@ -100,15 +103,52 @@ namespace SoftwareGraphicsSandbox {
                                  m12, m13, m14, m15);
         }
 
-        public static Matrix4x4 Translate(float x, float y, float z) {
+        // LookAt is the Camera matrix
+        public static Matrix4x4 LookAt(Point3D cameraPosition, Point3D cameraTarget, Point3D cameraUpVector) {
+
+            var zaxis = (cameraTarget - cameraPosition).Normalized;
+            var xaxis = Point3D.Cross(cameraUpVector, zaxis).Normalized;
+            var yaxis = Point3D.Cross(zaxis, xaxis);
+            
+
+            Matrix4x4 result = new Matrix4x4();
+
+            result.M0 = xaxis.X;
+            result.M1 = yaxis.X;
+            result.M2 = zaxis.X;
+            result.M3 = 0;
+
+            result.M4 = xaxis.Y;
+            result.M5 = yaxis.Y;
+            result.M6 = zaxis.Y;
+            result.M7 = 0;
+
+            result.M8 = xaxis.Z;
+            result.M9 = yaxis.Z;
+            result.M10 = zaxis.Z;
+            result.M11 = 0;
+
+            result.M12 = -Point3D.Dot(xaxis, cameraPosition);
+            result.M13 = -Point3D.Dot(yaxis, cameraPosition);
+            result.M14 = -Point3D.Dot(zaxis, cameraPosition);
+            result.M15 = 1;
+
+            return Matrix4x4.Transposed(result);
+        }
+
+
+
+
+
+        public static Matrix4x4 Translate(Point3D position) {
             var resultMatrix = Identity;
-            resultMatrix.M3 = x;
-            resultMatrix.M7 = y;
-            resultMatrix.M11 = z;
+            resultMatrix.M3 = position.X;
+            resultMatrix.M7 = position.Y;
+            resultMatrix.M11 = position.Z;
             return resultMatrix;
         }
 
-        public static Matrix4x4 scaleMatrix(float scale) {
+        public static Matrix4x4 ScaleMatrix(float scale) {
             float m0 = scale;
             float m1 = 0;
             float m2 = 0;
@@ -132,7 +172,7 @@ namespace SoftwareGraphicsSandbox {
                                  m12, m13, m14, m15);
         }
 
-        public static Matrix4x4 scaleMatrix(float scaleX, float scaleY, float scaleZ) {
+        public static Matrix4x4 ScaleMatrix(float scaleX, float scaleY, float scaleZ) {
             float m0 = scaleX;
             float m1 = 0;
             float m2 = 0;
@@ -156,13 +196,13 @@ namespace SoftwareGraphicsSandbox {
                                  m12, m13, m14, m15);
         }
 
-        public static Matrix4x4 projectionMatrix(float viewAngle, float zNear, float zFar) {
-            float m0 = (1024/768) * MathF.Tan(2 / viewAngle);
+        public static Matrix4x4 ProjectionMatrix(float viewAngle, float zNear, float zFar, float aspect) {
+            float m0 = aspect * MathF.Tan(viewAngle / 2.0f);
             float m1 = 0;
             float m2 = 0;
             float m3 = 0;
             float m4 = 0;
-            float m5 = MathF.Tan(2 / viewAngle);
+            float m5 = MathF.Tan(viewAngle / 2);
             float m6 = 0;
             float m7 = 0;
             float m8 = 0;
@@ -181,7 +221,14 @@ namespace SoftwareGraphicsSandbox {
 
         }
 
-        public static Matrix4x4 inverseMatrix(Matrix4x4 matrix) {
+
+        public Matrix4x4 inverse {
+            get {
+                return Matrix4x4.InverseMatrix(this);
+            }
+        }
+
+        public static Matrix4x4 InverseMatrix(Matrix4x4 matrix) {
             float m11 = matrix.M0;
             float m12 = matrix.M1;
             float m13 = matrix.M2;

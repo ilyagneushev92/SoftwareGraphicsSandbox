@@ -14,7 +14,12 @@ namespace SoftwareGraphicsSandbox {
             Y = y;
             Z = z;
             M = m;
-
+        }
+        public Point4D(Point3D p) {
+            X = p.X;
+            Y = p.Y;
+            Z = p.Z;
+            M = 1.0f;
         }
     }
 }

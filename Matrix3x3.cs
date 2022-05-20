@@ -17,8 +17,8 @@ namespace SoftwareGraphicsSandbox {
         public static Matrix3x3 Identity {
             get {
                 return new Matrix3x3(
-                    1, 0, 0, 
-                    0, 1, 0, 
+                    1, 0, 0,
+                    0, 1, 0,
                     0, 0, 1);
             }
         }
@@ -125,16 +125,16 @@ namespace SoftwareGraphicsSandbox {
             var det = m11 * (m22 * m33 - m23 * m32) - m12 * (m21 * m33 - m23 * m31) + m13 * (m21 * m32 - m22 * m31);
 
             var a11 = m22 * m33 - m23 * m32;
-            var a12 = m21 * m33 - m23 * m31; 
-            var a13 = m21 * m32 - m22 * m31; 
+            var a12 = m21 * m33 - m23 * m31;
+            var a13 = m21 * m32 - m22 * m31;
             var a21 = m12 * m33 - m32 * m13;
-            var a22 = m11 * m33 - m13 * m31; 
+            var a22 = m11 * m33 - m13 * m31;
             var a23 = m11 * m32 - m12 * m31;
             var a31 = m12 * m23 - m22 * m13;
             var a32 = m11 * m23 - m21 * m13;
-            var a33 = m11 * m22 - m12 * m21; 
+            var a33 = m11 * m22 - m12 * m21;
 
-            var result = new  Matrix3x3(a11 / det, -a21 / det,  a31 / det,
+            var result = new Matrix3x3(a11 / det, -a21 / det, a31 / det,
                                         -a12 / det, a22 / det, -a32 / det,
                                          a13 / det, -a23 / det, a33 / det);
 
@@ -172,6 +172,14 @@ namespace SoftwareGraphicsSandbox {
             float x = Matrix.M0 * Point.X + Matrix.M1 * Point.Y + Matrix.M2;
             float y = Matrix.M3 * Point.X + Matrix.M4 * Point.Y + Matrix.M5;
             return new Point2D(x, y);
+        }
+
+        public static Point3D[] operator *(Matrix3x3 matrix, Point3D[] points) {
+            var result = new Point3D[points.Length];
+            for (int i = 0; i < points.Length; ++i) {
+                result[i] = matrix * points[i];
+            }
+            return result;
         }
     }
 }

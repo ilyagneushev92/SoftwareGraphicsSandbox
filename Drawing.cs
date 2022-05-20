@@ -87,9 +87,9 @@ namespace SoftwareGraphicsSandbox {
             foreach (int a in range(a0, a1)) {
                 if (!swap)
                     // setPixel or setPixel2 ???
-                    setPixel2(image, a, b, color);
+                    image.SetPixel(a, b, color);
                 else
-                    setPixel2(image, b, a, color);
+                    image.SetPixel(b, a, color);
 
                 error += k;
 
