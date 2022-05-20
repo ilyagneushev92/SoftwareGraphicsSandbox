@@ -28,7 +28,7 @@ namespace SoftwareGraphicsSandbox {
             int i = 0;
             for (int c = 0; c < columns; c++) {
                 float startZ = 0.5f - c * cellColumn;
-                for (int r = 0; r < columns; r++) {
+                for (int r = 0; r < rows; r++) {
                     float startX = -0.5f + r * cellRow;
                     
 

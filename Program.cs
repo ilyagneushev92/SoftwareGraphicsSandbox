@@ -76,6 +76,8 @@ namespace SoftwareGraphicsSandbox {
 
             var cameraProjectionMatrix = Matrix4x4.ProjectionMatrix(cameraFov, 70f, 100.0f, cameraAspect);
 
+            int a = 1;
+            int time = 0;
 
             while (_running) {
                 //Render image 
@@ -116,9 +118,11 @@ namespace SoftwareGraphicsSandbox {
                 //drawMesh(Mesh.Cube(), modelMatrix, cameraViewMatrix, cameraProjectionMatrix);
 
                 
-                drawMesh(Mesh.Plane(3, 3), modelMatrix, cameraViewMatrix, cameraProjectionMatrix);
-                
-                
+                drawMesh(Mesh.Plane(a, a), modelMatrix, cameraViewMatrix, cameraProjectionMatrix);
+                time++;
+                if (time % 250 == 0) a++;
+
+
 
 
                 //Point2D Point1 = new Point2D(150, 0);
