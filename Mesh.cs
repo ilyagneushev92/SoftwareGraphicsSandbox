@@ -119,23 +119,47 @@ namespace SoftwareGraphicsSandbox {
 
         
 
-        public static Point3D[] Sphere(int smoothness) {
-            float step = 2 * MathF.PI / smoothness;
-            int verticesAmount = smoothness * smoothness;
-            Point3D[] vertices = new Point3D[verticesAmount];
+        public static Mesh Sphere(int rows, int columns) {
+            // rows = parallels; columns = meridians
 
-            var sin = MathF.Sin(step);
-            var cos = MathF.Cos(step);
-            var prevPoint = new Point3D(1, 0, 0);
+            var horizontalStep = (float)(2 * MathF.PI / columns);
+            var verticalStep = (float)(1/2f * MathF.PI / rows);
 
-            for (int i = 0; i <= smoothness; i++) {
-                var currentPoint = new Point3D(cos * prevPoint.X - sin * prevPoint.Y, sin * prevPoint.X + cos * prevPoint.Y, 0);
-                vertices[i] = currentPoint;
-                prevPoint = currentPoint;
+            var triangleNumber = rows * columns * 2;
+            var triangleVerticesNumber = triangleNumber * 3;
+            var vertices = new Point3D[triangleVerticesNumber];
 
+            var horCos = MathF.Cos(horizontalStep);
+            var horSin = MathF.Sin(horizontalStep);
+
+            var vertCos = MathF.Cos(verticalStep);
+            var vertSin = MathF.Sin(verticalStep);
+            
+
+            var c = 0;
+            // start is the initial point
+            var start = new Point3D(-0.5f, 0, 0.5f);
+
+            for (int i = 0; i < columns; i++) {
+                var firstBottom = start;
+                var secondBottom = new Point3D(horCos * start.X - horSin * start.Z, start.Y, horSin * start.X + horCos * start.Z);
+                var firstTop = new Point3D(vertCos * start.X - vertSin * start.Y, vertSin * start.X + vertCos * start.Y, start.Z);
+                var secondTop = new Point3D(horCos * secondBottom.X - horSin * secondBottom.Z, secondBottom.Y, horSin * secondBottom.X + horCos * secondBottom.Z);
+
+                vertices[c] = firstBottom;
+                vertices[c + 1] = secondBottom;
+                vertices[c + 2] = firstTop;
+
+                vertices[c + 3] = secondBottom;
+                vertices[c + 4] = firstTop;
+                vertices[c + 5] = secondTop;
+
+                c += 6;
+
+                start = secondBottom;
             }
 
-            return vertices;
+            return new Mesh(vertices);
 
         }
         

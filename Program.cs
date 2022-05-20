@@ -118,9 +118,12 @@ namespace SoftwareGraphicsSandbox {
                 //drawMesh(Mesh.Cube(), modelMatrix, cameraViewMatrix, cameraProjectionMatrix);
 
                 
-                drawMesh(Mesh.Plane(a, a), modelMatrix, cameraViewMatrix, cameraProjectionMatrix);
-                time++;
-                if (time % 250 == 0) a++;
+                //drawMesh(Mesh.Plane(3, 1), modelMatrix, cameraViewMatrix, cameraProjectionMatrix);
+                //time++;
+                //if (time % 250 == 0) a++;
+
+                drawMesh(Mesh.Sphere(2, 4), modelMatrix, cameraViewMatrix, cameraProjectionMatrix);
+
 
 
 
