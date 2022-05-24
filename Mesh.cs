@@ -64,7 +64,6 @@ namespace SoftwareGraphicsSandbox {
             var vertices = new Point3D[] {
 
 
-
                 new Point3D(-0.5f, 0.5f, 0.5f),
                 new Point3D(0.5f, 0.5f, 0.5f),
                 new Point3D(0.5f, 0.5f, -0.5f),
@@ -117,53 +116,54 @@ namespace SoftwareGraphicsSandbox {
             return new Mesh(vertices);
         }
 
-        
-
         public static Mesh Sphere(int rows, int columns) {
-            // rows = parallels; columns = meridians
+            int verticesNumber = (rows + 1) * (columns + 1);
 
-            var horizontalStep = (float)(2 * MathF.PI / columns);
-            var verticalStep = (float)(1/2f * MathF.PI / rows);
+            int triangleNumber = rows * columns * 2;
+            int triangleVerticesNumber = triangleNumber * 3;
 
-            var triangleNumber = rows * columns * 2;
-            var triangleVerticesNumber = triangleNumber * 3;
-            var vertices = new Point3D[triangleVerticesNumber];
+            Point3D[] triangleVertices = new Point3D[triangleVerticesNumber];
 
-            var horCos = MathF.Cos(horizontalStep);
-            var horSin = MathF.Sin(horizontalStep);
+            float cellRow = MathF.PI / rows;
+            float cellColumn = 2 * MathF.PI / columns;
 
-            var vertCos = MathF.Cos(verticalStep);
-            var vertSin = MathF.Sin(verticalStep);
-            
+            float teta = MathF.PI;
+            float psi = 2 * MathF.PI;
 
-            var c = 0;
-            // start is the initial point
-            var start = new Point3D(-0.5f, 0, 0.5f);
+            int i = 0;
 
-            for (int i = 0; i < columns; i++) {
-                var firstBottom = start;
-                var secondBottom = new Point3D(horCos * start.X - horSin * start.Z, start.Y, horSin * start.X + horCos * start.Z);
-                var firstTop = new Point3D(vertCos * start.X - vertSin * start.Y, vertSin * start.X + vertCos * start.Y, start.Z);
-                var secondTop = new Point3D(horCos * secondBottom.X - horSin * secondBottom.Z, secondBottom.Y, horSin * secondBottom.X + horCos * secondBottom.Z);
+            for (int c = 0; c < columns; c++) {
+                teta -= c * cellColumn;
+                for (int r = 0; r < rows; r++) {
+                    psi -= r * cellRow;
+                    Point3D firstTop = new Point3D(MathF.Sin(teta) * MathF.Cos(psi), MathF.Sin(teta) * MathF.Sin(psi), MathF.Cos(teta));
+                    Point3D secondTop = new Point3D(MathF.Sin(teta - cellColumn) * MathF.Cos(psi), MathF.Sin(teta - cellColumn) * MathF.Sin(psi), MathF.Cos(teta - cellColumn));
+                    Point3D firstBottom = new Point3D(MathF.Sin(teta) * MathF.Cos(psi - cellRow), MathF.Sin(teta) * MathF.Sin(psi - cellRow), MathF.Cos(teta));
+                    Point3D secondBottom = new Point3D(MathF.Sin(teta - cellColumn) * MathF.Cos(psi - cellRow), MathF.Sin(teta - cellColumn) * MathF.Sin(psi - cellRow), MathF.Cos(teta - cellColumn));
 
-                vertices[c] = firstBottom;
-                vertices[c + 1] = secondBottom;
-                vertices[c + 2] = firstTop;
+                    triangleVertices[i] = firstTop;
+                    triangleVertices[i + 1] = secondTop;
+                    triangleVertices[i + 2] = firstBottom;
 
-                vertices[c + 3] = secondBottom;
-                vertices[c + 4] = firstTop;
-                vertices[c + 5] = secondTop;
+                    triangleVertices[i + 3] = secondTop;
+                    triangleVertices[i + 4] = firstBottom;
+                    triangleVertices[i + 5] = secondBottom;
 
-                c += 6;
+                    i += 6;
 
-                start = secondBottom;
+                }
             }
 
-            return new Mesh(vertices);
+            return new Mesh(triangleVertices);
+
 
         }
+
         
-       
+
+
+
+
     }
 }
 

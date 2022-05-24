@@ -115,14 +115,12 @@ namespace SoftwareGraphicsSandbox {
 
 
                 Matrix4x4 modelMatrix = Matrix4x4.Identity;
-                //drawMesh(Mesh.Cube(), modelMatrix, cameraViewMatrix, cameraProjectionMatrix);
-
-                
+              
                 //drawMesh(Mesh.Plane(3, 1), modelMatrix, cameraViewMatrix, cameraProjectionMatrix);
-                //time++;
-                //if (time % 250 == 0) a++;
+                time++;
+                if (time % 250 == 0) a++;
 
-                drawMesh(Mesh.Sphere(2, 4), modelMatrix, cameraViewMatrix, cameraProjectionMatrix);
+                drawMesh(Mesh.Sphere(10, 10), modelMatrix, cameraViewMatrix, cameraProjectionMatrix);
 
 
 
