@@ -13,24 +13,22 @@ namespace SoftwareGraphicsSandbox {
         public Mesh(IEnumerable<Point3D> vertices) {
             Vertices = vertices.ToArray();
         }
-        
-        // rows, columns - number of CELLS in a grid. NOT vertices, blyat.
+
+
         public static Mesh Plane(int rows, int columns) {
             int verticesNumber = (rows + 1) * (columns + 1);
             int triangleNumber = rows * columns * 2;
             int triangleVerticesNumber = triangleNumber * 3;
-
             // List is like a array
-            Point3D[] triangleVertices = new Point3D[triangleVerticesNumber];
+            var triangleVertices = new Point3D[triangleVerticesNumber];
 
+            int i = 0;
             float cellRow = 1f / rows;
             float cellColumn = 1f / columns;
-            int i = 0;
             for (int c = 0; c < columns; c++) {
                 float startZ = 0.5f - c * cellColumn;
                 for (int r = 0; r < rows; r++) {
                     float startX = -0.5f + r * cellRow;
-                    
 
                     Point3D LeftTop = new Point3D(startX, 0, startZ);
                     Point3D RightTop = new Point3D(startX + cellRow, 0, startZ);
@@ -40,22 +38,16 @@ namespace SoftwareGraphicsSandbox {
                     triangleVertices[i] = LeftTop;
                     triangleVertices[i + 1] = RightTop;
                     triangleVertices[i + 2] = LeftBottom;
-
                     triangleVertices[i + 3] = RightTop;
                     triangleVertices[i + 4] = LeftBottom;
                     triangleVertices[i + 5] = RightBottom;
 
                     i += 6;
 
-
-
+                    
                 }
             }
 
-
-            
-
-            
             return new Mesh(triangleVertices);
 
         }
@@ -122,34 +114,33 @@ namespace SoftwareGraphicsSandbox {
             int triangleNumber = rows * columns * 2;
             int triangleVerticesNumber = triangleNumber * 3;
 
-            Point3D[] triangleVertices = new Point3D[triangleVerticesNumber];
+            var triangleVertices = new List<Point3D>();
 
-            float cellRow = MathF.PI / rows;
-            float cellColumn = 2 * MathF.PI / columns;
+            float cellRow = 2 * MathF.PI / rows;
+            float cellColumn = MathF.PI / columns;
 
-            float teta = MathF.PI;
-            float psi = 2 * MathF.PI;
-
-            int i = 0;
+            float psi = 0f;
+            float teta = 0f;
+            
 
             for (int c = 0; c < columns; c++) {
-                teta -= c * cellColumn;
+                teta = c*cellColumn;
                 for (int r = 0; r < rows; r++) {
-                    psi -= r * cellRow;
+                    psi = r*cellRow;
+
                     Point3D firstTop = new Point3D(MathF.Sin(teta) * MathF.Cos(psi), MathF.Sin(teta) * MathF.Sin(psi), MathF.Cos(teta));
-                    Point3D secondTop = new Point3D(MathF.Sin(teta - cellColumn) * MathF.Cos(psi), MathF.Sin(teta - cellColumn) * MathF.Sin(psi), MathF.Cos(teta - cellColumn));
-                    Point3D firstBottom = new Point3D(MathF.Sin(teta) * MathF.Cos(psi - cellRow), MathF.Sin(teta) * MathF.Sin(psi - cellRow), MathF.Cos(teta));
-                    Point3D secondBottom = new Point3D(MathF.Sin(teta - cellColumn) * MathF.Cos(psi - cellRow), MathF.Sin(teta - cellColumn) * MathF.Sin(psi - cellRow), MathF.Cos(teta - cellColumn));
+                    Point3D secondTop = new Point3D(MathF.Sin(teta) * MathF.Cos(psi + cellRow), MathF.Sin(teta) * MathF.Sin(psi + cellRow), MathF.Cos(teta));
+                    Point3D firstBottom = new Point3D(MathF.Sin(teta + cellColumn) * MathF.Cos(psi), MathF.Sin(teta + cellColumn) * MathF.Sin(psi), MathF.Cos(teta + cellColumn));
+                    Point3D secondBottom = new Point3D(MathF.Sin(teta + cellColumn) * MathF.Cos(psi + cellRow), MathF.Sin(teta + cellColumn) * MathF.Sin(psi + cellRow), MathF.Cos(teta + cellColumn));
 
-                    triangleVertices[i] = firstTop;
-                    triangleVertices[i + 1] = secondTop;
-                    triangleVertices[i + 2] = firstBottom;
+                    triangleVertices.Add(firstTop);
+                    triangleVertices.Add(secondTop);
+                    triangleVertices.Add(firstBottom);
 
-                    triangleVertices[i + 3] = secondTop;
-                    triangleVertices[i + 4] = firstBottom;
-                    triangleVertices[i + 5] = secondBottom;
-
-                    i += 6;
+                    triangleVertices.Add(secondTop);
+                    triangleVertices.Add(firstBottom);
+                    triangleVertices.Add(secondBottom);
+                    
 
                 }
             }

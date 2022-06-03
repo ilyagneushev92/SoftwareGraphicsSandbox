@@ -109,7 +109,6 @@ namespace SoftwareGraphicsSandbox {
             var zaxis = (cameraTarget - cameraPosition).Normalized;
             var xaxis = Point3D.Cross(cameraUpVector, zaxis).Normalized;
             var yaxis = Point3D.Cross(zaxis, xaxis);
-            
 
             Matrix4x4 result = new Matrix4x4();
 
