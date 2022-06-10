@@ -5,6 +5,102 @@ using System.Text;
 namespace SoftwareGraphicsSandbox {
     static class Drawing {
 
+        public static void FillTriangle(Image image, Point2D first, Point2D second, Point2D third,  Color32 color) {
+            if (first.Y > second.Y) {
+                var e1 = first;
+                first = second;
+                second = e1;
+            }
+            if (first.Y > third.Y) {
+                var e1 = first;
+                first = third;
+                third = e1;
+            }
+            if (second.Y > third.Y) {
+                var e1 = second;
+                second = third;
+                third = e1;
+            }
+
+            float xMid = first.X + (second.Y - first.Y) / (third.Y - first.Y) * (third.X - first.X);
+
+            float xLeftDown = Math.Min(xMid, second.X);
+            float xRightDown = Math.Max(xMid, second.X);
+            float xLeftUp = xLeftDown;
+            float xRightUp = xRightDown;
+
+            float leftDownK = (third.X - xLeftDown) / (third.Y - second.Y);
+            float rightDownK = (third.X - xRightDown) / (third.Y - second.Y);
+            float rightUpK = (first.X - xRightUp) / (second.Y - first.Y);
+            float leftUpK = (first.X - xLeftUp) / (second.Y - first.Y);
+
+            for (int y = (int)second.Y; y <= third.Y; y++) {
+
+                xLeftDown += leftDownK;
+                xRightDown += rightDownK;
+
+                int xStart = (int)xLeftDown;
+                int xEnd = (int)xRightDown;
+
+                for (int xLine = xStart; xLine <= xEnd; xLine++) {
+                    image.SetPixel(xLine, y, Color32.Red);
+
+                }
+            }
+
+            for (int y = (int)second.Y; y >= first.Y; y--) {
+
+                xLeftUp += leftUpK;
+                xRightUp += rightUpK;
+
+                int xStart = (int)xLeftUp;
+                int xEnd = (int)xRightUp;
+
+                for (int xLine = xStart; xLine <= xEnd; xLine++) {
+                    image.SetPixel(xLine, y, Color32.Red);
+
+                }
+            }
+
+            Drawing.DrawTriangle(image, first, second, third, color);
+
+        }
+
+
+        public static void FillParticularTriangle(Point2D first, Point2D second, Point2D third, Image image, Color32 color) {
+            var x1 = (int)first.X;
+            var y1 = (int)first.Y;
+            var x2 = (int)second.X;
+            var y2 = (int)second.Y;
+            var x3 = (int)third.X;
+            var y3 = (int)third.Y;
+
+            float xLeft = Math.Min(x1, x2);
+            float xRight = Math.Max(x1, x2);
+
+
+            float leftK = (third.X - first.X) / (third.Y - first.Y);
+            float rightK = (third.X - second.X) / (third.Y - second.Y);
+
+
+            for (int y = y1; y <= y3; y++) {
+
+                xLeft += leftK;
+                xRight += rightK;
+
+                int xStart = (int)xLeft;
+                int xEnd = (int)xRight;
+
+                for (int xLine = xStart; xLine <= xEnd; xLine++) {
+                    image.SetPixel(xLine, y, color);
+
+                }
+
+                Drawing.DrawTriangle(image, first, second, third, color);
+            }
+
+        }
+
         public static void DrawCircle(Matrix3x3 Matrix, int verticesAmount, Image image, Color32 color) {
             float step = 2 * MathF.PI / verticesAmount;
             // constStep is for second point of drawing line
