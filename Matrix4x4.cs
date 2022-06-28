@@ -327,11 +327,11 @@ namespace SoftwareGraphicsSandbox {
 
         // Matrix4x4 multiplies Point4D
         public static Point4D operator *(Point4D Point, Matrix4x4 Matrix) {
-            float x = Matrix.M0 * Point.X + Matrix.M1 * Point.Y + Matrix.M2 * Point.Z + Matrix.M3 * Point.M;
-            float y = Matrix.M4 * Point.X + Matrix.M5 * Point.Y + Matrix.M6 * Point.Z + Matrix.M7 * Point.M;
-            float z = Matrix.M8 * Point.X + Matrix.M9 * Point.Y + Matrix.M10 * Point.Z + Matrix.M11 * Point.M;
-            float m = Matrix.M12 * Point.X + Matrix.M13 * Point.Y + Matrix.M14 * Point.Z + Matrix.M15 * Point.M;
-            return new Point4D(x, y, z, m);
+            float x = Matrix.M0 * Point.X + Matrix.M1 * Point.Y + Matrix.M2 * Point.Z + Matrix.M3 * Point.W;
+            float y = Matrix.M4 * Point.X + Matrix.M5 * Point.Y + Matrix.M6 * Point.Z + Matrix.M7 * Point.W;
+            float z = Matrix.M8 * Point.X + Matrix.M9 * Point.Y + Matrix.M10 * Point.Z + Matrix.M11 * Point.W;
+            float w = Matrix.M12 * Point.X + Matrix.M13 * Point.Y + Matrix.M14 * Point.Z + Matrix.M15 * Point.W;
+            return new Point4D(x, y, z, w);
 
         }
 
@@ -340,7 +340,7 @@ namespace SoftwareGraphicsSandbox {
             float x = Matrix.M0 * Point.X + Matrix.M1 * Point.Y + Matrix.M2 * Point.Z + Matrix.M3;
             float y = Matrix.M4 * Point.X + Matrix.M5 * Point.Y + Matrix.M6 * Point.Z + Matrix.M7;
             float z = Matrix.M8 * Point.X + Matrix.M9 * Point.Y + Matrix.M10 * Point.Z + Matrix.M11;
-            float m = Matrix.M12 * Point.X + Matrix.M13 * Point.Y + Matrix.M14 * Point.Z + Matrix.M15;
+            float w = Matrix.M12 * Point.X + Matrix.M13 * Point.Y + Matrix.M14 * Point.Z + Matrix.M15;
             return new Point3D(x, y, z);
 
         }

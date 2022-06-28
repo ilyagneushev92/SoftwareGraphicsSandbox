@@ -5,6 +5,7 @@ using System.Text;
 namespace SoftwareGraphicsSandbox {
     static class Drawing {
 
+
         public static void FillTriangle(Image image, Point2D first, Point2D second, Point2D third,  Color32 color) {
             if (first.Y > second.Y) {
                 var e1 = first;
@@ -62,7 +63,7 @@ namespace SoftwareGraphicsSandbox {
                 }
             }
 
-            Drawing.DrawTriangle(image, first, second, third, color);
+            DrawTriangle(image, first, second, third, color);
 
         }
 

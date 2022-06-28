@@ -39,8 +39,8 @@ namespace SoftwareGraphicsSandbox {
                     triangleVertices[i + 1] = RightTop;
                     triangleVertices[i + 2] = LeftBottom;
                     triangleVertices[i + 3] = RightTop;
-                    triangleVertices[i + 4] = LeftBottom;
-                    triangleVertices[i + 5] = RightBottom;
+                    triangleVertices[i + 4] = RightBottom;
+                    triangleVertices[i + 5] = LeftBottom;
 
                     i += 6;
 
@@ -112,7 +112,6 @@ namespace SoftwareGraphicsSandbox {
             int verticesNumber = (rows + 1) * (columns + 1);
 
             int triangleNumber = rows * columns * 2;
-            int triangleVerticesNumber = triangleNumber * 3;
 
             var triangleVertices = new List<Point3D>();
 
@@ -138,8 +137,8 @@ namespace SoftwareGraphicsSandbox {
                     triangleVertices.Add(firstBottom);
 
                     triangleVertices.Add(secondTop);
-                    triangleVertices.Add(firstBottom);
                     triangleVertices.Add(secondBottom);
+                    triangleVertices.Add(firstBottom);
                     
 
                 }

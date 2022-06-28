@@ -7,19 +7,19 @@ namespace SoftwareGraphicsSandbox {
         public float X;
         public float Y;
         public float Z;
-        public float M;
+        public float W;
         
-        public Point4D(float x, float y, float z, float m) {
+        public Point4D(float x, float y, float z, float w) {
             X = x;
             Y = y;
             Z = z;
-            M = m;
+            W = w;
         }
         public Point4D(Point3D p) {
             X = p.X;
             Y = p.Y;
             Z = p.Z;
-            M = 1.0f;
+            W = 1.0f;
         }
     }
 }
