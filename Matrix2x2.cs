@@ -30,7 +30,7 @@ namespace SoftwareGraphicsSandbox {
             M3 = 0;
         }
 
-        public static Matrix2x2 transposed(Matrix2x2 matrix) {
+        public static Matrix2x2 Transposed(Matrix2x2 matrix) {
             float swap = matrix.M1;
             float m0 = matrix.M0;
             float m3 = matrix.M3;
@@ -40,7 +40,7 @@ namespace SoftwareGraphicsSandbox {
 
         }
 
-        public static Matrix2x2 rotateMatrix(float angleRadians) {
+        public static Matrix2x2 RotateMatrix(float angleRadians) {
             float m0 = (float)Math.Cos(angleRadians);
             float m2 = -(float)Math.Sin(angleRadians);
             float m1 = (float)Math.Sin(angleRadians);
@@ -48,7 +48,7 @@ namespace SoftwareGraphicsSandbox {
             return new Matrix2x2(m0, m1, m2, m3);
         }
 
-        public static Matrix2x2 scaleMatrix(float scale) {
+        public static Matrix2x2 ScaleMatrix(float scale) {
             float m0 = scale;
             float m1 = 0;
             float m2 = 0;
@@ -56,7 +56,7 @@ namespace SoftwareGraphicsSandbox {
             return new Matrix2x2(m0, m1, m2, m3);
         }
 
-        public static Matrix2x2 scaleMatrix(float scaleX, float scaleY) {
+        public static Matrix2x2 ScaleMatrix(float scaleX, float scaleY) {
             float m0 = scaleX;
             float m1 = 0;
             float m2 = 0;

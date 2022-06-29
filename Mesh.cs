@@ -52,59 +52,74 @@ namespace SoftwareGraphicsSandbox {
 
         }
 
+        private static Point3D[] CubeVertices() {
+
+            var result = new Point3D[] {
+            new Point3D(-0.5f, 0.5f, -0.5f),
+            new Point3D(0.5f, 0.5f, -0.5f),
+            new Point3D(0.5f, -0.5f, -0.5f),
+            new Point3D(-0.5f, -0.5f, -0.5f),
+        
+            new Point3D(-0.5f, 0.5f, 0.5f),
+            new Point3D(0.5f, 0.5f, 0.5f),
+            new Point3D(0.5f, -0.5f, 0.5f),
+            new Point3D(-0.5f, -0.5f, 0.5f),
+        };
+            return result;
+
+        }
+
         public static Mesh Cube() {
             var vertices = new Point3D[] {
 
+                CubeVertices()[0],
+                CubeVertices()[1],
+                CubeVertices()[2],
 
-                new Point3D(-0.5f, 0.5f, 0.5f),
-                new Point3D(0.5f, 0.5f, 0.5f),
-                new Point3D(0.5f, 0.5f, -0.5f),
+                CubeVertices()[0],
+                CubeVertices()[2],
+                CubeVertices()[3],
 
-                new Point3D(-0.5f, 0.5f, 0.5f),
-                new Point3D(0.5f, 0.5f, -0.5f),
-                new Point3D(-0.5f, 0.5f, -0.5f),
+                CubeVertices()[4],
+                CubeVertices()[5],
+                CubeVertices()[1],
 
-                new Point3D(-0.5f, -0.5f, 0.5f),
-                new Point3D(0.5f, -0.5f, 0.5f),
-                new Point3D(0.5f, -0.5f, -0.5f),
+                CubeVertices()[4],
+                CubeVertices()[1],
+                CubeVertices()[0],
 
-                new Point3D(-0.5f, -0.5f, 0.5f),
-                new Point3D(0.5f, -0.5f, -0.5f),
-                new Point3D(-0.5f, -0.5f, -0.5f),
+                CubeVertices()[4],
+                CubeVertices()[0],
+                CubeVertices()[3],
 
-                new Point3D(-0.5f, 0.5f, 0.5f),
-                new Point3D(0.5f, 0.5f, 0.5f),
-                new Point3D(0.5f, -0.5f, 0.5f),
+                CubeVertices()[4],
+                CubeVertices()[3],
+                CubeVertices()[7],
 
-                new Point3D(-0.5f, 0.5f, 0.5f),
-                new Point3D(-0.5f, -0.5f, 0.5f),
-                new Point3D(0.5f, -0.5f, 0.5f),
+                CubeVertices()[1],
+                CubeVertices()[5],
+                CubeVertices()[6],
 
-                new Point3D(0.5f, 0.5f, 0.5f),
-                new Point3D(0.5f, -0.5f, 0.5f),
-                new Point3D(0.5f, -0.5f, -0.5f),
+                CubeVertices()[1],
+                CubeVertices()[6],
+                CubeVertices()[2],
 
-                new Point3D(0.5f, 0.5f, 0.5f),
-                new Point3D(0.5f, 0.5f, -0.5f),
-                new Point3D(0.5f, -0.5f, -0.5f),
+                CubeVertices()[3],
+                CubeVertices()[2],
+                CubeVertices()[6],
 
-                new Point3D(0.5f, 0.5f, 0.5f),
-                new Point3D(0.5f, 0.5f, -0.5f),
-                new Point3D(0.5f, -0.5f, -0.5f),
+                CubeVertices()[3],
+                CubeVertices()[6],
+                CubeVertices()[7],
 
-                new Point3D(-0.5f, 0.5f, -0.5f),
-                new Point3D(0.5f, -0.5f, -0.5f),
-                new Point3D(-0.5f, -0.5f, -0.5f),
+                CubeVertices()[5],
+                CubeVertices()[4],
+                CubeVertices()[7],
 
-                new Point3D(-0.5f, 0.5f, -0.5f),
-                new Point3D(-0.5f, -0.5f, 0.5f),
-                new Point3D(-0.5f, -0.5f, -0.5f),
-
-                new Point3D(-0.5f, 0.5f, 0.5f),
-                new Point3D(-0.5f, 0.5f, -0.5f),
-                new Point3D(-0.5f, -0.5f, 0.5f),
-
-                };
+                CubeVertices()[5],
+                CubeVertices()[7],
+                CubeVertices()[6],
+        };
             return new Mesh(vertices);
         }
 

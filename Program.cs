@@ -13,7 +13,7 @@ namespace SoftwareGraphicsSandbox {
 
         static Point3D cameraPosition = new Point3D(0, 1, -2);
 
-        static float z = 0.1f;
+        static float xPos = 0.1f;
 
         //
         static float m = 10;
@@ -57,6 +57,14 @@ namespace SoftwareGraphicsSandbox {
                 manage.X -= 5;
             }
 
+            if (key.KeyCode == Keys.Left) {
+                xPos -= 0.1f;
+            }
+
+            if (key.KeyCode == Keys.Right) {
+                xPos += 0.1f;
+            }
+
         }
 
 
@@ -91,17 +99,18 @@ namespace SoftwareGraphicsSandbox {
 
             float cameraFov = DegreesToRadians(120.0f);
 
-            var cameraProjectionMatrix = Matrix4x4.ProjectionMatrix(cameraFov, 0.1f, 100.0f, cameraAspect);
+            var cameraProjectionMatrix = Matrix4x4.ProjectionMatrix(cameraFov, 1f, 100.0f, cameraAspect);
 
             var sphere = Mesh.Sphere(29, 29);
             var plane = Mesh.Plane(7, 7);
+            var cube = Mesh.Cube();
 
             while (_running) {
                 //Render image 
                 //Process window messages
                 Application.DoEvents();
 
-                var position = new Point3D(0f, 0f, z);
+                var position = new Point3D(xPos, 0f, 0f);
 
                 image.FillColor(Color32.Black);
 
@@ -116,6 +125,7 @@ namespace SoftwareGraphicsSandbox {
                     var mvp = projection * view * model;
                     // Method select works like the method map in java script
                     var mvpPoints = mesh.Vertices.Select(x => new Point4D(x) * mvp).ToArray();
+                    //var mvpScreenPoints = mvpPoints.Select(x => new Point3D(x.X / x.W, x.Y / x.W, x.Z / x.W)).ToArray();
 
                     Point3D toPixelCoordinates(Point3D ndcSpace) {
                         Point3D result = new Point3D();
@@ -133,7 +143,7 @@ namespace SoftwareGraphicsSandbox {
                         var p2 = mvpPoints[i + 2];
 
                         // Discard whole triangles here
-                        Utils.DiscardTriangles(p0, p1, p2);
+                        Clipping.DiscardTriangles(p0, p1, p2);
 
                         // Initialize new points which appear after divide by w
                         var p03D = new Point3D(p0.X / p0.W, p0.Y / p0.W, p0.Z / p0.W);
@@ -145,17 +155,17 @@ namespace SoftwareGraphicsSandbox {
                         // near clipping tests and calculated adjusted vertices
                         if (p0.Z < 0) {
                             if (p1.Z < 0) {
-                                var Clip = Utils.Clip2(p03D, p13D, p23D);
+                                var Clip = Clipping.Clip2(p03D, p13D, p23D, cameraPosition.Z);
                                 PostClip.Add(Clip[0]);
                                 PostClip.Add(Clip[1]);
                                 PostClip.Add(Clip[2]);
                             } else if (p2.Z < 0) {
-                                var Clip = Utils.Clip2(p03D, p13D, p23D);
+                                var Clip = Clipping.Clip2(p03D, p13D, p23D, cameraPosition.Z);
                                 PostClip.Add(Clip[0]);
                                 PostClip.Add(Clip[1]);
                                 PostClip.Add(Clip[2]);
                             } else {
-                                var Clip = Utils.Clip1(p03D, p13D, p23D);
+                                var Clip = Clipping.Clip1(p03D, p13D, p23D, cameraPosition.Z);
                                 PostClip.Add(Clip[0]);
                                 PostClip.Add(Clip[1]);
                                 PostClip.Add(Clip[2]);
@@ -166,13 +176,13 @@ namespace SoftwareGraphicsSandbox {
                         } 
                         else if (p1.Z < 0) {
                              if (p2.Z < 0) {
-                                var Clip = Utils.Clip2(p03D, p13D, p23D);
+                                var Clip = Clipping.Clip2(p03D, p13D, p23D, cameraPosition.Z);
                                 PostClip.Add(Clip[0]);
                                 PostClip.Add(Clip[1]);
                                 PostClip.Add(Clip[2]);
                             } 
                              else {
-                                var Clip = Utils.Clip1(p03D, p13D, p23D);
+                                var Clip = Clipping.Clip1(p03D, p13D, p23D, cameraPosition.Z);
                                 PostClip.Add(Clip[0]);
                                 PostClip.Add(Clip[1]);
                                 PostClip.Add(Clip[2]);
@@ -182,7 +192,7 @@ namespace SoftwareGraphicsSandbox {
                             }
                         } 
                         else if (p2.Z < 0) {
-                                var Clip = Utils.Clip1(p03D, p13D, p23D);
+                                var Clip = Clipping.Clip1(p03D, p13D, p23D, cameraPosition.Z);
                                 PostClip.Add(Clip[0]);
                                 PostClip.Add(Clip[1]);
                                 PostClip.Add(Clip[2]);
@@ -198,7 +208,7 @@ namespace SoftwareGraphicsSandbox {
                         }
 
                         for (int j = 0; j < PostClip.Count; j++) {
-                            
+                          
                             mvpScreenPoints.Add(PostClip[j]);
                         }
 
@@ -215,57 +225,29 @@ namespace SoftwareGraphicsSandbox {
                         var p2p0 = new Point3D(p2.X - p0.X, p2.Y - p0.Y, p2.Z - p0.Z);
                         var cross = Point3D.Cross(p1p0, p2p0);
                         if (cross.Z > 0) {
-                            Drawing.FillTriangle(image, new Point2D(p0.X, p0.Y), new Point2D(p1.X, p1.Y), new Point2D(p2.X, p2.Y), Color32.Red);
-                            Drawing.DrawTriangle(image, new Point2D(p0.X, p0.Y), new Point2D(p1.X, p1.Y), new Point2D(p2.X, p2.Y), Color32.White);
+                           var p02 = new Point2D(p0.X, p0.Y);
+                           var p12 = new Point2D(p1.X, p1.Y);
+                           var p22 = new Point2D(p2.X, p2.Y);
+                            Clipping.ClipTrianglesFor2D(p02, p12, p22, 100, image);
+                            //Drawing.FillTriangle(image, new Point2D(p0.X, p0.Y), new Point2D(p1.X, p1.Y), new Point2D(p2.X, p2.Y), Color32.Red);
+                            //Drawing.DrawTriangle(image, new Point2D(p0.X, p0.Y), new Point2D(p1.X, p1.Y), new Point2D(p2.X, p2.Y), Color32.White);
                         }
                     }
                 }
 
-                
+                Matrix4x4 modelMatrix = Matrix4x4.Translate(position) * Matrix4x4.RotateMatrix(angle);
 
-                Matrix4x4 modelMatrix = Matrix4x4.Translate(position);
-
-                //DrawMesh(plane, modelMatrix, cameraViewMatrix, cameraProjectionMatrix);
+                DrawMesh(plane, modelMatrix, cameraViewMatrix, cameraProjectionMatrix);
 
                 //DrawMesh(sphere, modelMatrix, cameraViewMatrix, cameraProjectionMatrix); 
+
+                //DrawMesh(cube, modelMatrix, cameraViewMatrix, cameraProjectionMatrix);
 
                 var p0 = new Point2D(250, 100);
                 var p1 = new Point2D(370, 100);
                 var p2 = new Point2D(120, 280);
-                Drawing.BresenhamLinePoint2D(image, new Point2D(manage.X, 50), new Point2D(manage.X, 400), Color32.White);
 
-                if (p0.X < manage.X &&
-                    p1.X < manage.X &&
-                    p2.X < manage.X) {
-                    return;
-                }
-
-                if (p0.X < manage.X) {
-                    if (p1.X < manage.X) {
-                        Utils.Clip2for2D(p0, p1, p2, image, Color32.White);
-                        
-                    } else if (p2.X < manage.X) {
-                        Utils.Clip2for2D(p0, p2, p1, image, Color32.White);
-                    } else {
-                        Utils.Clip1for2D(p0, p1, p2, image, Color32.White, manage.X);
-                    }
-                } else if (p1.X < manage.X) {
-                    if (p2.X < manage.X) {
-                        Utils.Clip2for2D(p1, p2, p0, image, Color32.White);
-                    } else {
-                        Utils.Clip1for2D(p1, p0, p2, image, Color32.White, manage.X);
-                    }
-                } else if (p2.X < manage.X) {
-                        Utils.Clip1for2D(p2, p0, p1, image, Color32.White, manage.X);
-                }
-                      // no near clipping
-                      else {
-                    Drawing.FillTriangle(image, p0, p1, p2, Color32.White);
-                }
-
-                
-
-
+                //Utils.ClipTrianglesFor2D(p0, p1, p2, manage.X, image);
 
                 //Show image in window
                 renderer.Present();
