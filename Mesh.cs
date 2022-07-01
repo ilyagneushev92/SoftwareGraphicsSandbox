@@ -69,6 +69,19 @@ namespace SoftwareGraphicsSandbox {
 
         }
 
+        public static Mesh Triangle3D() {
+
+            var result = new Point3D[] {
+
+            new Point3D(0f, 0.5f, 1.5f),
+            new Point3D(0.5f, 0f, -0.5f),
+            new Point3D(-0.5f, 0f, -0.5f),
+        };
+
+            return new Mesh(result);
+
+        }
+
         public static Mesh Cube() {
             var vertices = new Point3D[] {
 
