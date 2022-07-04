@@ -12,8 +12,8 @@ namespace SoftwareGraphicsSandbox {
 
         public Point3D(Point4D p) {
             X = p.X/p.W;
-            Y = p.Y / p.W;
-            Z = p.Z / p.W;
+            Y = p.Y/p.W;
+            Z = p.Z/p.W;
         }
         public static Point3D Right {
             get {

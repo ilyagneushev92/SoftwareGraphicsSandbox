@@ -12,6 +12,9 @@ namespace SoftwareGraphicsSandbox {
         public byte r;
         public byte a;
 
+        public static Color32 Swamp {
+            get { return new Color32 { a = 0xff, r = 125, g = 125, b = 0 }; }
+        }
         public static Color32 Red {
             get { return new Color32 { a = 0xff, r = 0xff, g = 0, b = 0 }; }
         }

@@ -77,9 +77,7 @@ namespace SoftwareGraphicsSandbox {
             new Point3D(0.5f, 0f, -0.5f),
             new Point3D(-0.5f, 0f, -0.5f),
         };
-
             return new Mesh(result);
-
         }
 
         public static Mesh Cube() {

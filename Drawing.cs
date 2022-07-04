@@ -44,7 +44,7 @@ namespace SoftwareGraphicsSandbox {
                 int xEnd = (int)xRightDown;
 
                 for (int xLine = xStart; xLine <= xEnd; xLine++) {
-                    image.SetPixel(xLine, y, Color32.Red);
+                    image.SetPixel(xLine, y, color);
 
                 }
             }
@@ -58,7 +58,7 @@ namespace SoftwareGraphicsSandbox {
                 int xEnd = (int)xRightUp;
 
                 for (int xLine = xStart; xLine <= xEnd; xLine++) {
-                    image.SetPixel(xLine, y, Color32.Red);
+                    image.SetPixel(xLine, y, color);
 
                 }
             }

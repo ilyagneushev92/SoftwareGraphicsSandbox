@@ -11,15 +11,6 @@ namespace SoftwareGraphicsSandbox {
             return result;
         }
 
-        static Point3D toPixelCoordinates(Point3D ndcSpace, Image image) {
-            Point3D result = new Point3D();
-            result.X = ndcSpace.X * 0.5f * image.Width + (image.Width / 2.0f);
-            result.Y = -ndcSpace.Y * 0.5f * image.Height + (image.Height / 2.0f);
-            result.Z = ndcSpace.Z;
-            return result;
-        }
-
-
         public static void DiscardTriangles(Point4D v0, Point4D v1, Point4D v2) {
             if (v0.X > v0.W &&
                 v1.X > v1.W &&
@@ -51,9 +42,9 @@ namespace SoftwareGraphicsSandbox {
                 return;
             }
 
-            if (v0.Z < 0.01f &&
-                v1.Z < 0.01f &&
-                v2.Z < 0.01f) {
+            if (v0.Z < 0.0f &&
+                v1.Z < 0.0f &&
+                v2.Z < 0.0f) {
                 return;
             }
         }
@@ -91,79 +82,53 @@ namespace SoftwareGraphicsSandbox {
 
         }
 
-        public static void Clip1(Point4D v0, Point4D v1, Point4D v2, Image image) {
-            var AlphaA = (-v0.Z)/(v1.Z - v0.Z);
-            var v0a = v0 + (v1 - v0) * AlphaA;
+        public static Point4D[] Clip1(Point4D v0, Point4D v1, Point4D v2) {
+            var result = new Point4D[6];
 
+            var AlphaA = (-v0.Z)/(v1.Z - v0.Z);
             var AlphaB = (-v0.Z) / (v2.Z - v0.Z);
+            //var v0a = new Point4D(v0.X + (v1.X - v0.X) * AlphaA, v0.Y + (v1.Y - v0.Y) * AlphaA, v0.Z + (v1.Z - v0.Z) * AlphaA, 1.0f);
+            //var v0b = new Point4D(v0.X + (v2.X - v0.X) * AlphaB, v0.Y + (v2.Y - v0.Y) * AlphaB, v0.Z + (v2.Z - v0.Z) * AlphaB, 1.0f);
+
+            var v0a = v0 + (v1 - v0) * AlphaA;
             var v0b = v0 + (v2 - v0) * AlphaB;
 
             // 2 triangles 
+            result[0] = v0a;
+            result[1] = v1;
+            result[2] = v2;
+                   
+            result[3] = v0a;
+            result[4] = v2;
+            result[5] = v0b;
 
-            var p0 = toPixelCoordinates(new Point3D(v0a), image);
-            var p1 = toPixelCoordinates(new Point3D(v1), image);
-            var p2 = toPixelCoordinates(new Point3D(v2), image);
-
-                // triangle normal direction test
-                var p1p0 = new Point3D(p1.X - p0.X, p1.Y - p0.Y, p1.Z - p0.Z);
-                var p2p0 = new Point3D(p2.X - p0.X, p2.Y - p0.Y, p2.Z - p0.Z);
-                var cross = Point3D.Cross(p1p0, p2p0);
-            if (cross.Z > 0) {
-                var p02 = new Point2D(p0.X, p0.Y);
-                var p12 = new Point2D(p1.X, p1.Y);
-                var p22 = new Point2D(p2.X, p2.Y);
-                Drawing.FillTriangle(image, new Point2D(p0.X, p0.Y), new Point2D(p1.X, p1.Y), new Point2D(p2.X, p2.Y), Color32.Red);
-                Drawing.DrawTriangle(image, new Point2D(p0.X, p0.Y), new Point2D(p1.X, p1.Y), new Point2D(p2.X, p2.Y), Color32.White);
-                {
-
-                    p0 = toPixelCoordinates(new Point3D(v0b), image);
-                    p1 = toPixelCoordinates(new Point3D(v0a), image);
-                    p2 = toPixelCoordinates(new Point3D(v2), image);
-
-                    // triangle normal direction test
-                    p1p0 = new Point3D(p1.X - p0.X, p1.Y - p0.Y, p1.Z - p0.Z);
-                    p2p0 = new Point3D(p2.X - p0.X, p2.Y - p0.Y, p2.Z - p0.Z);
-                    cross = Point3D.Cross(p1p0, p2p0);
-                    if (cross.Z > 0) {
-                    p02 = new Point2D(p0.X, p0.Y);
-                    p12 = new Point2D(p1.X, p1.Y);
-                    p22 = new Point2D(p2.X, p2.Y);
-                    Drawing.FillTriangle(image, new Point2D(p0.X, p0.Y), new Point2D(p1.X, p1.Y), new Point2D(p2.X, p2.Y), Color32.Red);
-                    Drawing.DrawTriangle(image, new Point2D(p0.X, p0.Y), new Point2D(p1.X, p1.Y), new Point2D(p2.X, p2.Y), Color32.White);
-                    }
-
-                }
-            }
+            return result;
         }
 
             
         
 
-        public static void Clip2(Point4D v0, Point4D v1, Point4D v2, Image image) {
+        public static Point4D[] Clip2(Point4D v0, Point4D v1, Point4D v2) {
+            var result = new Point4D[3];
+
+            var Alpha0 = (-v0.Z) / (v2.Z - v0.Z);
             var Alpha1 = (-v1.Z) / (v2.Z - v1.Z);
+            //var v0New = new Point4D(v0.X + (v2.X - v0.X) * Alpha0, v0.Y + (v2.Y - v0.Y) * Alpha0, v0.Z + (v2.Z - v0.Z) * Alpha0, 1.0f);
+            //var v1New = new Point4D(v1.X + (v2.X - v1.X) * Alpha1, v1.Y + (v2.Y - v1.Y) * Alpha1, v1.Z + (v2.Z - v1.Z) * Alpha1, 1.0f);
+
+            var v0New = v0 + (v2 - v0) * Alpha0;
             var v1New = v1 + (v2 - v1) * Alpha1;
 
-            var Alpha0 = (- v0.Z) / (v2.Z - v0.Z);
-            var v0New = v0 + (v2 - v0) * Alpha0;
-
-
-            var p0 = toPixelCoordinates(new Point3D(v0New), image);
-            var p1 = toPixelCoordinates(new Point3D(v2), image);
-            var p2 = toPixelCoordinates(new Point3D(v1New), image);
-
-            Drawing.FillTriangle(image, new Point2D(p0.X, p0.Y), new Point2D(p1.X, p1.Y), new Point2D(p2.X, p2.Y), Color32.Red);
-            Drawing.DrawTriangle(image, new Point2D(p0.X, p0.Y), new Point2D(p1.X, p1.Y), new Point2D(p2.X, p2.Y), Color32.White);
 
             // 1 triangle
+            result[0] = v0New;
+            result[1] = v1New;
+            result[2] = v2;
 
+            return result;
         }
 
         public static void Clip1for2D(Point2D v0, Point2D v1, Point2D v2, Image image, Color32 color, float edge) {
-            //float AlphaA = (-v0.X) / (v1.X - v0.X);
-            //float AlphaB = (-v0.X) / (v2.X - v0.X);
-            // interpolate to get new vertices
-            //var v0a = v0 + (v1 - v0) * AlphaA;
-            //var v0b = v0 + (v2 - v0) * AlphaB;
 
             var edgeYa = (v0.Y - (v0.X - edge) * (v0.Y - v1.Y) / (v0.X - v1.X));
             var v0a = new Point2D(edge, edgeYa);
