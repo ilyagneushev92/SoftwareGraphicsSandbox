@@ -16,7 +16,6 @@ namespace SoftwareGraphicsSandbox {
 
 
         public static Mesh Plane(int rows, int columns) {
-            int verticesNumber = (rows + 1) * (columns + 1);
             int triangleNumber = rows * columns * 2;
             int triangleVerticesNumber = triangleNumber * 3;
             // List is like a array
@@ -26,14 +25,16 @@ namespace SoftwareGraphicsSandbox {
             float cellRow = 1f / rows;
             float cellColumn = 1f / columns;
             for (int c = 0; c < columns; c++) {
-                float startZ = 0.5f - c * cellColumn;
+                var startZ = 0.5f - c * cellColumn;
                 for (int r = 0; r < rows; r++) {
-                    float startX = -0.5f + r * cellRow;
+                    var startX = -0.5f + r * cellRow;
+                    var curZ = startZ;
+                    var curX = startX;
 
-                    Point3D LeftTop = new Point3D(startX, 0, startZ);
-                    Point3D RightTop = new Point3D(startX + cellRow, 0, startZ);
-                    Point3D LeftBottom = new Point3D(startX, 0, startZ - cellColumn);
-                    Point3D RightBottom = new Point3D(startX + cellRow, 0, startZ - cellColumn);
+                    Point3D LeftTop = new Point3D(curX, 0, curZ);
+                    Point3D RightTop = new Point3D(curX + cellRow, 0, curZ);
+                    Point3D LeftBottom = new Point3D(curX, 0, curZ - cellColumn);
+                    Point3D RightBottom = new Point3D(curX + cellRow, 0, curZ - cellColumn);
 
                     triangleVertices[i] = LeftTop;
                     triangleVertices[i + 1] = RightTop;

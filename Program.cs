@@ -13,7 +13,7 @@ namespace SoftwareGraphicsSandbox {
 
 
         // z position is -2 by default and y position is 1
-        static Point3D cameraPosition = new Point3D(0, 1, -2);
+        static Point3D cameraPosition = new Point3D(-0.5f, 0.8f, -2f);
 
         static float zPos = 0.0f;
 
@@ -167,7 +167,7 @@ namespace SoftwareGraphicsSandbox {
                         var p2 = mvpPoints[i + 2];
 
                         // Discard whole triangles here
-                        Clipping.DiscardTriangles(p0, p1, p2);
+                        //Clipping.DiscardTriangles(p0, p1, p2);
 
                         // near clipping tests and calculated adjusted vertices
                         if (p0.Z < 0) {
@@ -178,7 +178,7 @@ namespace SoftwareGraphicsSandbox {
                                 var v0 = pixelCoordinates[0];
                                 var v1 = pixelCoordinates[1];
                                 var v2 = pixelCoordinates[2];
-                                if (normalTest(v0, v1, v2)) {
+                                if (normalTest(v2, v1, v0)) {
                                     Drawing.FillTriangle(image, new Point2D(v0.X, v0.Y), new Point2D(v1.X, v1.Y), new Point2D(v2.X, v2.Y), Color32.Swamp);
                                     Drawing.DrawTriangle(image, new Point2D(v0.X, v0.Y), new Point2D(v1.X, v1.Y), new Point2D(v2.X, v2.Y), Color32.White);
                                 }
@@ -189,7 +189,7 @@ namespace SoftwareGraphicsSandbox {
                                 var v0 = pixelCoordinates[0];
                                 var v1 = pixelCoordinates[1];
                                 var v2 = pixelCoordinates[2];
-                                if (normalTest(v0, v1, v2)) {
+                                if (normalTest(v2, v1, v0)) {
                                     Drawing.FillTriangle(image, new Point2D(v0.X, v0.Y), new Point2D(v1.X, v1.Y), new Point2D(v2.X, v2.Y), Color32.Swamp);
                                     Drawing.DrawTriangle(image, new Point2D(v0.X, v0.Y), new Point2D(v1.X, v1.Y), new Point2D(v2.X, v2.Y), Color32.White);
                                 }
@@ -235,7 +235,7 @@ namespace SoftwareGraphicsSandbox {
                                 var v0 = pixelCoordinates[0];
                                 var v1 = pixelCoordinates[1];
                                 var v2 = pixelCoordinates[2];
-                                if (normalTest(v0, v1, v2)) {
+                                if (normalTest(v2, v1, v0)) {
                                     Drawing.FillTriangle(image, new Point2D(v0.X, v0.Y), new Point2D(v1.X, v1.Y), new Point2D(v2.X, v2.Y), Color32.Red);
                                     Drawing.DrawTriangle(image, new Point2D(v0.X, v0.Y), new Point2D(v1.X, v1.Y), new Point2D(v2.X, v2.Y), Color32.White);
                                 }
@@ -243,13 +243,13 @@ namespace SoftwareGraphicsSandbox {
                                 var v3 = pixelCoordinates[3];
                                 var v4 = pixelCoordinates[4];
                                 var v5 = pixelCoordinates[5];
-                                if (normalTest(v3, v4, v5)) {
+                                if (normalTest(v5, v4, v3)) {
                                     Drawing.FillTriangle(image, new Point2D(v3.X, v3.Y), new Point2D(v4.X, v4.Y), new Point2D(v5.X, v5.Y), Color32.Red);
                                     Drawing.DrawTriangle(image, new Point2D(v3.X, v3.Y), new Point2D(v4.X, v4.Y), new Point2D(v5.X, v5.Y), Color32.White);
                                 }
                             }
                         } 
-                        else if (p2.Z < 0) {
+                        else if (p2.Z <0) {
                             var clippedVertices = Clipping.Clip1(p2, p0, p1);
                             var mvpScreenPoints = toMvpScreenPoints(clippedVertices);
                             var pixelCoordinates = toPixelCoordinates(mvpScreenPoints);
@@ -264,7 +264,7 @@ namespace SoftwareGraphicsSandbox {
                             var v3 = pixelCoordinates[3];
                             var v4 = pixelCoordinates[4];
                             var v5 = pixelCoordinates[5];
-                            if (normalTest(v0, v1, v2)) {
+                            if (normalTest(v3, v4, v5)) {
                                 Drawing.FillTriangle(image, new Point2D(v3.X, v3.Y), new Point2D(v4.X, v4.Y), new Point2D(v5.X, v5.Y), Color32.Red);
                                 Drawing.DrawTriangle(image, new Point2D(v3.X, v3.Y), new Point2D(v4.X, v4.Y), new Point2D(v5.X, v5.Y), Color32.White);
                             }     
@@ -283,29 +283,9 @@ namespace SoftwareGraphicsSandbox {
                             }
                         }
                     }
-                    
-
-                    //for (int i = 0; i < mvpScreenPoints.Count; i += 3) {
-                    //    var p0 = toPixelCoordinates(mvpScreenPoints[i]);
-                    //    var p1 = toPixelCoordinates(mvpScreenPoints[i + 1]);
-                    //    var p2 = toPixelCoordinates(mvpScreenPoints[i + 2]);
-
-                    //    // triangle normal direction test
-                    //    var p1p0 = new Point3D(p1.X - p0.X, p1.Y - p0.Y, p1.Z - p0.Z);
-                    //    var p2p0 = new Point3D(p2.X - p0.X, p2.Y - p0.Y, p2.Z - p0.Z);
-                    //    var cross = Point3D.Cross(p1p0, p2p0);
-                    //    if (cross.Z > 0) {
-                    //       var p02 = new Point2D(p0.X, p0.Y);
-                    //       var p12 = new Point2D(p1.X, p1.Y);
-                    //       var p22 = new Point2D(p2.X, p2.Y);
-                    //        Clipping.ClipTrianglesFor2D(p02, p12, p22, 100, image);
-                    //        //Drawing.FillTriangle(image, new Point2D(p0.X, p0.Y), new Point2D(p1.X, p1.Y), new Point2D(p2.X, p2.Y), Color32.Red);
-                    //        //Drawing.DrawTriangle(image, new Point2D(p0.X, p0.Y), new Point2D(p1.X, p1.Y), new Point2D(p2.X, p2.Y), Color32.White);
-                    //    }
-                    //}
                 }
 
-                Matrix4x4 modelMatrix = Matrix4x4.Translate(position);//* Matrix4x4.RotateMatrix(angle);
+                Matrix4x4 modelMatrix = Matrix4x4.Translate(position);// * Matrix4x4.RotateMatrix(angle);
                 
                 DrawMesh(plane, modelMatrix, cameraViewMatrix, cameraProjectionMatrix);
 
