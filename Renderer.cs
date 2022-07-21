@@ -42,6 +42,8 @@ namespace SoftwareGraphicsSandbox {
 
         public Image BackBuffer { get; private set; }
 
+        public DepthBuffer _DepthBuffer { get; private set; }
+
         public struct BITMAPINFO {
             public BITMAPINFOHEADER bmiHeader;
             public int bmiColors;
@@ -71,6 +73,8 @@ namespace SoftwareGraphicsSandbox {
 
             BackBuffer = new Image(_screenWidth, _screenHeight);
         }
+
+
 
         public void Present() {
             var handle = GCHandle.Alloc(BackBuffer.Data, GCHandleType.Pinned);

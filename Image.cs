@@ -46,13 +46,13 @@ namespace SoftwareGraphicsSandbox {
 
         public void FillColor(Color32 color) {
             var buffer = Data;
-            for(int i = 0; i < buffer.Length; ++i) {
+            for (int i = 0; i < buffer.Length; ++i) {
                 buffer[i] = color;
             }
         }
 
         public bool SetPixel(int x, int y, Color32 color) {
-            if(x < 0 || x >= Width) {
+            if (x < 0 || x >= Width) {
                 return false;
             }
             if (y < 0 || y >= Height) {
@@ -64,3 +64,7 @@ namespace SoftwareGraphicsSandbox {
         }
     }
 }
+
+
+
+

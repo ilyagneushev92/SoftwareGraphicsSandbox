@@ -14,11 +14,20 @@ namespace SoftwareGraphicsSandbox {
             Vertices = vertices.ToArray();
         }
 
+        public static Mesh SimpleTriangle() {
+            var result = new Point3D[] {
+            new Point3D(-1.0f, 0, -0.7f),
+            new Point3D(-1.0f, 0, 0.7f),
+            new Point3D(0.8f, 0, 0.7f),
+
+        };
+            return new Mesh(result);
+        }
+
 
         public static Mesh Plane(int rows, int columns) {
             int triangleNumber = rows * columns * 2;
             int triangleVerticesNumber = triangleNumber * 3;
-            // List is like a array
             var triangleVertices = new Point3D[triangleVerticesNumber];
 
             int i = 0;
@@ -28,47 +37,98 @@ namespace SoftwareGraphicsSandbox {
                 var startZ = 0.5f - c * cellColumn;
                 for (int r = 0; r < rows; r++) {
                     var startX = -0.5f + r * cellRow;
-                    var curZ = startZ;
-                    var curX = startX;
 
-                    Point3D LeftTop = new Point3D(curX, 0, curZ);
-                    Point3D RightTop = new Point3D(curX + cellRow, 0, curZ);
-                    Point3D LeftBottom = new Point3D(curX, 0, curZ - cellColumn);
-                    Point3D RightBottom = new Point3D(curX + cellRow, 0, curZ - cellColumn);
+                    Point3D LeftTop = new Point3D(startX, 0, startZ);
+                    Point3D RightTop = new Point3D(startX + cellRow, 0, startZ);
+                    Point3D LeftBottom = new Point3D(startX, 0, startZ - cellColumn);
+                    Point3D RightBottom = new Point3D(startX + cellRow, 0, startZ - cellColumn);
 
                     triangleVertices[i] = LeftTop;
                     triangleVertices[i + 1] = RightTop;
                     triangleVertices[i + 2] = LeftBottom;
-                    triangleVertices[i + 3] = RightTop;
-                    triangleVertices[i + 4] = RightBottom;
-                    triangleVertices[i + 5] = LeftBottom;
+                    triangleVertices[i + 3] = LeftBottom;
+                    triangleVertices[i + 4] = RightTop;
+                    triangleVertices[i + 5] = RightBottom;
 
                     i += 6;
 
-                    
+
                 }
             }
-
             return new Mesh(triangleVertices);
-
         }
 
-        private static Point3D[] CubeVertices() {
-
+        private static Point3D[] Plane2x2Vertices() {
             var result = new Point3D[] {
+            new Point3D(-0.5f, 0, 0.5f),
+            new Point3D(0, 0, 0.5f),
+            new Point3D(0.5f, 0, 0.5f),
+
+            new Point3D(-0.5f, 0, 0),
+            new Point3D(0, 0, 0),
+            new Point3D(0.5f, 0, 0),
+
+            new Point3D(-0.5f, 0, -0.5f),
+            new Point3D(0, -0, -0.5f),
+            new Point3D(0.5f, 0, -0.5f),
+
+
+        };
+            return result;
+        }
+
+        public static Mesh Plane2x2() {
+            var vertices = new Point3D[] {
+            Plane2x2Vertices()[0],
+            Plane2x2Vertices()[1],
+            Plane2x2Vertices()[3],
+
+            Plane2x2Vertices()[1],
+            Plane2x2Vertices()[4],
+            Plane2x2Vertices()[3],
+
+            Plane2x2Vertices()[1],
+            Plane2x2Vertices()[2],
+            Plane2x2Vertices()[4],
+
+            Plane2x2Vertices()[2],
+            Plane2x2Vertices()[5],
+            Plane2x2Vertices()[4],
+
+            Plane2x2Vertices()[3],
+            Plane2x2Vertices()[4],
+            Plane2x2Vertices()[6],
+
+            Plane2x2Vertices()[4],
+            Plane2x2Vertices()[7],
+            Plane2x2Vertices()[6],
+
+            Plane2x2Vertices()[4],
+            Plane2x2Vertices()[5],
+            Plane2x2Vertices()[7],
+
+            Plane2x2Vertices()[5],
+            Plane2x2Vertices()[8],
+            Plane2x2Vertices()[7],
+            };
+
+            return new Mesh(vertices);
+        }
+
+
+
+
+        private static Point3D[] _cubeVertices = new Point3D[] {
             new Point3D(-0.5f, 0.5f, -0.5f),
             new Point3D(0.5f, 0.5f, -0.5f),
             new Point3D(0.5f, -0.5f, -0.5f),
             new Point3D(-0.5f, -0.5f, -0.5f),
-        
             new Point3D(-0.5f, 0.5f, 0.5f),
             new Point3D(0.5f, 0.5f, 0.5f),
             new Point3D(0.5f, -0.5f, 0.5f),
             new Point3D(-0.5f, -0.5f, 0.5f),
         };
-            return result;
-
-        }
+           
 
         public static Mesh Triangle3D() {
 
@@ -84,53 +144,53 @@ namespace SoftwareGraphicsSandbox {
         public static Mesh Cube() {
             var vertices = new Point3D[] {
 
-                CubeVertices()[0],
-                CubeVertices()[1],
-                CubeVertices()[2],
+                _cubeVertices[0],
+                _cubeVertices[1],
+                _cubeVertices[2],
 
-                CubeVertices()[0],
-                CubeVertices()[2],
-                CubeVertices()[3],
+                _cubeVertices[0],
+                _cubeVertices[2],
+                _cubeVertices[3],
 
-                CubeVertices()[4],
-                CubeVertices()[5],
-                CubeVertices()[1],
+                _cubeVertices[4],
+                _cubeVertices[5],
+                _cubeVertices[1],
 
-                CubeVertices()[4],
-                CubeVertices()[1],
-                CubeVertices()[0],
+                _cubeVertices[4],
+                _cubeVertices[1],
+                _cubeVertices[0],
 
-                CubeVertices()[4],
-                CubeVertices()[0],
-                CubeVertices()[3],
+                _cubeVertices[4],
+                _cubeVertices[0],
+                _cubeVertices[3],
 
-                CubeVertices()[4],
-                CubeVertices()[3],
-                CubeVertices()[7],
+                _cubeVertices[4],
+                _cubeVertices[3],
+                _cubeVertices[7],
 
-                CubeVertices()[1],
-                CubeVertices()[5],
-                CubeVertices()[6],
+                _cubeVertices[1],
+                _cubeVertices[5],
+                _cubeVertices[6],
 
-                CubeVertices()[1],
-                CubeVertices()[6],
-                CubeVertices()[2],
+                _cubeVertices[1],
+                _cubeVertices[6],
+                _cubeVertices[2],
 
-                CubeVertices()[3],
-                CubeVertices()[2],
-                CubeVertices()[6],
+                _cubeVertices[3],
+                _cubeVertices[2],
+                _cubeVertices[6],
 
-                CubeVertices()[3],
-                CubeVertices()[6],
-                CubeVertices()[7],
+                _cubeVertices[3],
+                _cubeVertices[6],
+                _cubeVertices[7],
 
-                CubeVertices()[5],
-                CubeVertices()[4],
-                CubeVertices()[7],
+                _cubeVertices[5],
+                _cubeVertices[4],
+                _cubeVertices[7],
 
-                CubeVertices()[5],
-                CubeVertices()[7],
-                CubeVertices()[6],
+                _cubeVertices[5],
+                _cubeVertices[7],
+                _cubeVertices[6],
         };
             return new Mesh(vertices);
         }
@@ -145,28 +205,24 @@ namespace SoftwareGraphicsSandbox {
             float cellRow = 2 * MathF.PI / rows;
             float cellColumn = MathF.PI / columns;
 
-            float psi = 0f;
-            float teta = 0f;
-            
-
             for (int c = 0; c < columns; c++) {
-                teta = c*cellColumn;
+                var teta = c * cellColumn;
                 for (int r = 0; r < rows; r++) {
-                    psi = r*cellRow;
+                    var psi = r * cellRow;
 
                     Point3D firstTop = new Point3D(MathF.Sin(teta) * MathF.Cos(psi), MathF.Sin(teta) * MathF.Sin(psi), MathF.Cos(teta));
                     Point3D secondTop = new Point3D(MathF.Sin(teta) * MathF.Cos(psi + cellRow), MathF.Sin(teta) * MathF.Sin(psi + cellRow), MathF.Cos(teta));
                     Point3D firstBottom = new Point3D(MathF.Sin(teta + cellColumn) * MathF.Cos(psi), MathF.Sin(teta + cellColumn) * MathF.Sin(psi), MathF.Cos(teta + cellColumn));
                     Point3D secondBottom = new Point3D(MathF.Sin(teta + cellColumn) * MathF.Cos(psi + cellRow), MathF.Sin(teta + cellColumn) * MathF.Sin(psi + cellRow), MathF.Cos(teta + cellColumn));
 
+                    triangleVertices.Add(secondTop);
                     triangleVertices.Add(firstTop);
+                    triangleVertices.Add(firstBottom);
+
+                    triangleVertices.Add(secondBottom);
                     triangleVertices.Add(secondTop);
                     triangleVertices.Add(firstBottom);
 
-                    triangleVertices.Add(secondTop);
-                    triangleVertices.Add(secondBottom);
-                    triangleVertices.Add(firstBottom);
-                    
 
                 }
             }
@@ -176,7 +232,7 @@ namespace SoftwareGraphicsSandbox {
 
         }
 
-        
+
 
 
 
