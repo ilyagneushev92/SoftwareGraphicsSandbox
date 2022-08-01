@@ -91,10 +91,6 @@ namespace SoftwareGraphicsSandbox {
 
             var depth = new DepthBuffer(form.Width, form.Height);
 
-            foreach(int i in depth.Data) {
-                depth.Data[i] = 1000f;
-            }
-
             float DegreesToRadians(float angleDegrees) {
                 return (float)(angleDegrees * Math.PI / 180);
             }
@@ -107,13 +103,9 @@ namespace SoftwareGraphicsSandbox {
 
             float cameraFov = DegreesToRadians(120.0f);
 
-
             var sphere = Mesh.Sphere(29, 29);
             var plane = Mesh.Plane(2, 2);
             var cube = Mesh.Cube();
-            var triangle3D = Mesh.Triangle3D();
-            var plane2x2 = Mesh.Plane2x2();
-            var simpleTriangle = Mesh.SimpleTriangle();
 
             while (_running) {
                 //Render image 
@@ -122,10 +114,11 @@ namespace SoftwareGraphicsSandbox {
 
                 var cameraProjectionMatrix = Matrix4x4.ProjectionMatrix(cameraFov, 1.0f, 100.0f, cameraAspect);
 
-
                 var position = new Point3D(0f, 0f, zPos);
 
                 image.FillColor(Color32.Black);
+
+                depth.FillArray(1.0f);
 
                 angle += DegreesToRadians(0.1f);
 
@@ -197,7 +190,7 @@ namespace SoftwareGraphicsSandbox {
                                 var v1 = pixelCoordinates[1];
                                 var v2 = pixelCoordinates[2];
                                 if (normalTest(v0, v1, v2)) {
-                                    Drawing.FillTriangle(image, v0, v1, v2, Color32.Swamp);
+                                    Drawing.FillTriangle(depth, image, v0, v1, v2, Color32.Blue);
                                     //Drawing.DrawTriangle(image, v0, v1, v2, Color32.White);
                                 }
                             } else if (p2.Z < 0) {
@@ -208,7 +201,7 @@ namespace SoftwareGraphicsSandbox {
                                 var v1 = pixelCoordinates[1];
                                 var v2 = pixelCoordinates[2];
                                 if (normalTest(v2, v1, v0)) {
-                                    Drawing.FillTriangle(image, v0, v1, v2, Color32.Swamp);
+                                    Drawing.FillTriangle(depth, image, v0, v1, v2, Color32.Blue);
                                     //Drawing.DrawTriangle(image, v0, v1, v2, Color32.White);
                                 }
                             } else {
@@ -219,14 +212,14 @@ namespace SoftwareGraphicsSandbox {
                                 var v1 = pixelCoordinates[1];
                                 var v2 = pixelCoordinates[2];
                                 if (normalTest(v0, v1, v2)) {
-                                    Drawing.FillTriangle(image, v0, v1, v2, Color32.Red);
+                                    Drawing.FillTriangle(depth, image, v0, v1, v2, Color32.Blue);
                                     //Drawing.DrawTriangle(image, v0, v1, v2, Color32.White);
                                 }
                                 var v3 = pixelCoordinates[3];
                                 var v4 = pixelCoordinates[4];
                                 var v5 = pixelCoordinates[5];
                                 if (normalTest(v3, v4, v5)) {
-                                    Drawing.FillTriangle(image, v3, v4, v5, Color32.Red);
+                                    Drawing.FillTriangle(depth, image, v3, v4, v5, Color32.Blue);
                                     //Drawing.DrawTriangle(image, v0, v1, v2, Color32.White);
                                 }
                             }
@@ -239,7 +232,7 @@ namespace SoftwareGraphicsSandbox {
                                 var v1 = pixelCoordinates[1];
                                 var v2 = pixelCoordinates[2];
                                 if (normalTest(v0, v1, v2)) {
-                                    Drawing.FillTriangle(image, v0, v1, v2, Color32.Swamp);
+                                    Drawing.FillTriangle(depth, image, v0, v1, v2, Color32.Blue);
                                     //Drawing.DrawTriangle(image, v0, v1, v2, Color32.White);
                                 }
                             } else {
@@ -251,7 +244,7 @@ namespace SoftwareGraphicsSandbox {
                                 var v1 = pixelCoordinates[1];
                                 var v2 = pixelCoordinates[2];
                                 if (normalTest(v2, v1, v0)) {
-                                    Drawing.FillTriangle(image, v0, v1, v2, Color32.Red);
+                                    Drawing.FillTriangle(depth, image, v0, v1, v2, Color32.Blue);
                                     //Drawing.DrawTriangle(image, v0, v1, v2, Color32.White);
                                 }
 
@@ -259,7 +252,7 @@ namespace SoftwareGraphicsSandbox {
                                 var v4 = pixelCoordinates[4];
                                 var v5 = pixelCoordinates[5];
                                 if (normalTest(v5, v4, v3)) {
-                                    Drawing.FillTriangle(image, v3, v4, v5, Color32.Red);
+                                    Drawing.FillTriangle(depth, image, v3, v4, v5, Color32.Blue);
                                     //Drawing.DrawTriangle(image, v0, v1, v2, Color32.White);
                                 }
                             }
@@ -272,14 +265,14 @@ namespace SoftwareGraphicsSandbox {
                             var v1 = pixelCoordinates[1];
                             var v2 = pixelCoordinates[2];
                             if (normalTest(v0, v1, v2)) {
-                                Drawing.FillTriangle(image, v0, v1, v2, Color32.Red);
+                                Drawing.FillTriangle(depth, image, v0, v1, v2, Color32.Blue);
                                 //Drawing.DrawTriangle(image, v0, v1, v2, Color32.White);
                             }
                             var v3 = pixelCoordinates[3];
                             var v4 = pixelCoordinates[4];
                             var v5 = pixelCoordinates[5];
                             if (normalTest(v3, v4, v5)) {
-                                Drawing.FillTriangle(image, v3, v4, v5, Color32.Red);
+                                Drawing.FillTriangle(depth, image, v3, v4, v5, Color32.Blue);
                                 //Drawing.DrawTriangle(image, v0, v1, v2, Color32.White);
                             }
                         }
@@ -292,8 +285,9 @@ namespace SoftwareGraphicsSandbox {
                             var v1 = toPixelCoordinatesPoint(p1new);
                             var v2 = toPixelCoordinatesPoint(p2new);
                             if (normalTest(v0, v1, v2)) {
-                                Drawing.FillTriangle(image, v0, v1, v2, Color32.Blue);
-                               //Drawing.DrawTriangle(image, v0, v1, v2, Color32.White);
+                                Drawing.FillTriangle(depth, image, v0, v1, v2, Color32.Blue);
+                                Drawing.DrawTriangle(image, v0, v1, v2, Color32.White);
+
                             }
                         }
                     }
@@ -305,9 +299,11 @@ namespace SoftwareGraphicsSandbox {
                 Matrix4x4 modelMatrix2 = Matrix4x4.Translate(new Point3D(0,0,3)) * Matrix4x4.RotateMatrix(angle);
                 DrawMesh(cube, modelMatrix2, cameraViewMatrix, cameraProjectionMatrix);
 
-                var p0 = new Point2D(250, 100);
-                var p1 = new Point2D(370, 100);
-                var p2 = new Point2D(120, 280);
+                var p0 = new Point3D(250, 100, 0);
+                var p1 = new Point3D(370, 100, 0);
+                var p2 = new Point3D(120, 280, 0);
+
+                //Drawing.DrawTriangle(image, p0, p1, p2, Color32.White);
 
                 //Show image in window
                 renderer.Present();

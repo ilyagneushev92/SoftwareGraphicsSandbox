@@ -5,8 +5,23 @@ using System.Text;
 namespace SoftwareGraphicsSandbox {
     static class Drawing {
 
+        public static Point3D Interpolate(Point3D vertex1, Point3D vertex2, Point3D vertex3, float x, float y) {
+            
+            float d = (vertex2.Y - vertex3.Y)*(vertex1.X = vertex3.X) + (vertex3.X - vertex2.X)*(vertex1.Y - vertex3.Y);
+            float t1 = ((vertex2.Y - vertex3.Y) * (x - vertex3.X) + (vertex3.X - vertex2.X) * (y - vertex3.Y)) / d;
+            float t2 = ((vertex3.Y - vertex1.Y) * (x - vertex3.X) + (vertex1.X - vertex3.X) * (y - vertex3.Y)) / d;
+            float t3 = 1 - t1 - t2;
+            return new Point3D(t1, t2, t3);
+        }
 
-        public static void FillTriangle(Image image, Point3D first, Point3D second, Point3D third,  Color32 color) {
+        static float CalculateZ(Point3D vertex1, Point3D vertex2, Point3D vertex3, float x, float y) {
+            var weight = Interpolate(vertex1, vertex2, vertex3, x, y);
+            var result = weight.X * vertex1.Z + weight.Y * vertex2.Z + weight.Z * vertex3.Z;
+            return result;
+        }
+
+
+        public static void FillTriangle(DepthBuffer depth, Image image, Point3D first, Point3D second, Point3D third, Color32 color) {
 
             if (first.Y > second.Y) {
                 var e1 = first;
@@ -36,17 +51,20 @@ namespace SoftwareGraphicsSandbox {
             float rightUpK = (first.X - xRightUp) / (second.Y - first.Y);
             float leftUpK = (first.X - xLeftUp) / (second.Y - first.Y);
 
+            float z;
+
             for (int y = (int)second.Y; y <= third.Y; y++) {
 
                 xLeftDown += leftDownK;
                 xRightDown += rightDownK;
-
                 int xStart = (int)xLeftDown;
                 int xEnd = (int)xRightDown;
-
                 for (int xLine = xStart; xLine <= xEnd; xLine++) {
-                    image.SetPixel(xLine, y, color);
-
+                    z = CalculateZ(first, second, third, xLine, y);
+                    if (depth.Data[y * depth.Width + xLine] < z) {
+                        image.SetPixel(xLine, y, color);
+                        depth.SetPixel(xLine, y, z);
+                    }
                 }
             }
 
@@ -59,11 +77,14 @@ namespace SoftwareGraphicsSandbox {
                 int xEnd = (int)xRightUp;
 
                 for (int xLine = xStart; xLine <= xEnd; xLine++) {
+                    z = CalculateZ(first, second, third, xLine, y);
+                    if (depth.Data[y * depth.Width + xLine] < z) {
                         image.SetPixel(xLine, y, color);
-
+                        depth.SetPixel(xLine, y, z);
                     }
-            }
+                    }
 
+            }
         }
 
 

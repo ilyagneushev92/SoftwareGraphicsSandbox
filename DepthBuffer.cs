@@ -15,7 +15,7 @@ namespace SoftwareGraphicsSandbox {
             }
 
 
-            public void FillColor(float depth) {
+            public void FillArray(float depth) {
                 var buffer = Data;
                 for (int i = 0; i < buffer.Length; ++i) {
                     buffer[i] = depth;
