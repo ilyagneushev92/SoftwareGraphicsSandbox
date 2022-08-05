@@ -41,8 +41,8 @@ namespace SoftwareGraphicsSandbox {
 
             float xMid = first.X + (second.Y - first.Y) / (third.Y - first.Y) * (third.X - first.X);
 
-            float xLeftDown = Math.Min(xMid, second.X);
-            float xRightDown = Math.Max(xMid, second.X);
+            float xLeftDown = MathF.Min(xMid, second.X);
+            float xRightDown = MathF.Max(xMid, second.X);
             float xLeftUp = xLeftDown;
             float xRightUp = xRightDown;
 
@@ -57,11 +57,13 @@ namespace SoftwareGraphicsSandbox {
 
                 xLeftDown += leftDownK;
                 xRightDown += rightDownK;
+                
                 int xStart = (int)xLeftDown;
                 int xEnd = (int)xRightDown;
+
                 for (int xLine = xStart; xLine <= xEnd; xLine++) {
                     z = CalculateZ(first, second, third, xLine, y);
-                    if (depth.Data[y * depth.Width + xLine] < z) {
+                    if (depth.Data[y * depth.Width + xLine] > z) {
                         image.SetPixel(xLine, y, color);
                         depth.SetPixel(xLine, y, z);
                     }
@@ -78,7 +80,7 @@ namespace SoftwareGraphicsSandbox {
 
                 for (int xLine = xStart; xLine <= xEnd; xLine++) {
                     z = CalculateZ(first, second, third, xLine, y);
-                    if (depth.Data[y * depth.Width + xLine] < z) {
+                    if (depth.Data[y * depth.Width + xLine] > z) {
                         image.SetPixel(xLine, y, color);
                         depth.SetPixel(xLine, y, z);
                     }
